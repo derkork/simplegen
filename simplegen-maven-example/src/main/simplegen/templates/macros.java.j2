@@ -1,0 +1,14 @@
+{% macro nullable(nullable) -%}{% if nullable %}@javax.annotation.CheckForNull{% else %}@javax.annotation.Nonnull{% endif %}{%- endmacro %}
+{% macro property(name, type, nullable) -%}
+	{{ nullable(nullable) }}
+	private {{ type }} {{ name }};
+
+	public void set{{ name | title }}({{ nullable(nullable) }} {{type}} value) {
+		this.{{ name }} = value;
+	}
+
+	{{ nullable(nullable) }}
+	public {{ type }} get{{ name | title }}() {
+		return this.{{ name }};
+	}
+{%- endmacro %}

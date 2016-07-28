@@ -1,0 +1,21 @@
+{% import 'templates/macros.java.j2' as macros %}
+
+package {{ data.base_package }}.entities;
+
+import javax.persistence.Id;
+import javax.persistence.Entity;
+
+
+@Entity
+public class {{ node.name }} {
+
+	@Id
+	private String id = java.util.UUID.randomUUID().toString();
+
+	public String getId() { return id; }
+
+    {% for prop in node.properties %}
+    	{{ macros.property(prop.name, prop.type, prop.nullable) }}
+    {% endfor %}
+
+}

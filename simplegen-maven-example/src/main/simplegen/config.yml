@@ -1,0 +1,24 @@
+transformations:
+  - data:
+      - data.yml
+    template: templates/Entity.java.j2
+    nodes: entities
+    outputPath: "{{ data.base_package | replace('.', '/') }}/entities/{{ node.name }}.java"
+
+  - data:
+      - data.yml
+    template: templates/Dao.java.j2
+    nodes: entities
+    outputPath: "{{ data.base_package | replace('.', '/') }}/daos/{{ node.name }}Dao.java"
+
+  - data:
+      - data.yml
+    template: templates/View.java.j2
+    nodes: entities
+    outputPath: "{{ data.base_package | replace('.', '/') }}/views/{{ node.name }}View.java"
+
+  - data:
+      - data.yml
+    template: templates/Converter.java.j2
+    nodes: entities
+    outputPath: "{{ data.base_package | replace('.', '/') }}/converters/{{ node.name }}Converter.java"

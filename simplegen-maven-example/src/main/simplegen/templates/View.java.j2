@@ -1,0 +1,12 @@
+{% import 'templates/macros.java.j2' as macros %}
+
+package {{ data.base_package  }}.views;
+
+public class {{ node.name }}View {
+
+    {% for prop in node.properties %}
+    	{% if prop.viewable %}
+	    	{{ macros.property(prop.name, prop.type, prop.nullable) }}
+		{% endif %}
+	{% endfor %}
+}

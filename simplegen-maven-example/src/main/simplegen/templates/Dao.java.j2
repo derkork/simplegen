@@ -1,0 +1,14 @@
+{% import 'templates/macros.java.j2' as macros %}
+
+package {{ data.base_package }}.daos;
+
+public class {{ node.name }}Dao {
+
+	public void persist({{ macros.nullable(false)}} {{data.base_package}}.entities.{{node.name}} entity) {
+         // some implementation here
+	}
+
+	public void delete({{ macros.nullable(false)}} {{data.base_package}}.entities.{{node.name}} entity) {
+         // some implementation here
+	}
+}

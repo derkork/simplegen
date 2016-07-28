@@ -1,0 +1,20 @@
+{% import 'templates/macros.java.j2' as macros %}
+
+package {{ data.base_package }}.converters;
+
+
+public class {{ node.name }}Converter
+	implements org.springframework.core.convert.converter.Converter<{{ data.base_package  }}.entities.{{ node.name }}, {{ data.base_package  }}.views.{{ node.name }}View> {
+
+	{{macros.nullable(false)}}
+	public {{ data.base_package  }}.views.{{ node.name }}View convert({{macros.nullable(false)}} {{ data.base_package }}.entities.{{ node.name }} input) {
+		{{ data.base_package }}.views.{{ node.name }}View result = new {{ data.base_package }}.views.{{ node.name }}View();
+		{% for prop in node.properties -%}
+			{% if prop.viewable -%}
+				result.set{{ prop.name | title }}(input.get{{ prop.name | title}}());
+			{%- endif %}
+		{%- endfor %}
+		return result;
+
+	}
+}
