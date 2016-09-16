@@ -75,7 +75,7 @@ template is a Jinja2 template and in it you have access to two variables:
   that you want to share across templates.
   
 You can use every feature of the Jinja2 language including macros, includes, etc. When you include things remember that
-all paths must be specified relative to the ``config.yml`` file.  In addition to the standard filters, this packages
+all paths must be specified relative to the ``config.yml`` file.  In addition to the standard filters, this package
 adds a jsonpath filter to the templating engine, so you can use jsonpath to effectively select interesting substructures
 of your data:
 
