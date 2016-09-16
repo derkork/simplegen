@@ -38,8 +38,17 @@ empty java classes from a model. The data file for this could look like this:
 myclasses:
   - package: com.ancientlightstudios.myapp
     name: SomeClass
+    fields:
+    	- name: someField
+    	- visibility: private
+    	- type: java.lang.String
+    	
   - package: com.ancientlightstudios.myapp
     name: SomeOtherClass
+    fields:
+    	- name: someField
+    	- visibility: public
+    	- type: boolean
 ```
 
 The data file is totally free-form, you can structure it any way that fits your needs. There are no special keywords
@@ -66,7 +75,14 @@ template is a Jinja2 template and in it you have access to two variables:
   that you want to share across templates.
   
 You can use every feature of the Jinja2 language including macros, includes, etc. When you include things remember that
-all paths must be specified relative to the ``config.yml`` file. 
+all paths must be specified relative to the ``config.yml`` file.  In addition to the standard filters, this packages
+adds a jsonpath filter to the templating engine, so you can use jsonpath to effectively select interesting substructures
+of your data:
+
+```
+	{% set private_fields = node | jsonpath("$.fields[?(@.visibility == 'private')]") %}
+
+```
   
 You can find a larger example in [simplegen-maven-example!](simplegen-maven-example/)
 
