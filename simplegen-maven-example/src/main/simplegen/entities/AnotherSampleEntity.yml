@@ -1,0 +1,11 @@
+entities:
+  - name: AnotherSampleEntity
+    properties:
+    - name: parentEntity
+      type: com.ancientlightstudios.entities.SampleEntity
+      nullable: true
+
+    - name: someArray
+      type: int[]
+      nullable: false
+      viewable: true

@@ -12,6 +12,8 @@ The generator can be used standalone or as a Maven plugin. In both cases it expe
 * ``data.yml`` - a data file (you can choose any name you want, actually)
 * ``template.j2`` - at least one template
 
+### Configuration
+
 The generator will read instructions from the configuration file and execute them in the order specified there. Instructions
 look like this:
 
@@ -22,6 +24,13 @@ transformations:
     # Paths are relative to the config.yml file.
   - data: 
       - data.yml
+      # Also ant style file selection is supported
+      - **/*.yml
+      # or even full-blown
+      - includes: **/.yml
+        excluded: **/foo.yml
+        base_path: ../some/other/folder
+      
   	# Which template should be usd to render the data. Specify the path relative to the config.yml file.  
     template: template.j2
     # For which nodes in the data should the template be executed. This is a JsonPath.
@@ -30,6 +39,8 @@ transformations:
     outputPath: "{{ node.package | replace('.', '/') }}/{{ node.name }}.java"
 
 ```
+
+### Data
 
 Now you need a data file which gives the generator a data model to work on. In this example let's create
 empty java classes from a model. The data file for this could look like this:
@@ -55,6 +66,8 @@ The data file is totally free-form, you can structure it any way that fits your 
 that the generator acts upon, it's just a structured data file. Now with the configuration above, what happens is that
 the generator will execute the template ``template.j2`` for each node below the ``myclasses`` node.  The result of this
 template will be stored in a ``.java`` file corresponding to the node's ``name`` and ``package`` properties. 
+
+### Templates
   
 The last missing thing is the template and this looks like this:
 
@@ -80,7 +93,15 @@ adds a jsonpath filter to the templating engine, so you can use jsonpath to effe
 of your data:
 
 ```
-	{% set private_fields = node | jsonpath("$.fields[?(@.visibility == 'private')]") %}
+{% set private_fields = node | jsonpath("$.fields[?(@.visibility == 'private')]") %}
+
+```
+
+It is also possible to inject data through system properties using the `sp` filter:
+  
+```
+# Assuming you have set a system property with -DsomeProp=someValue
+{{ 'someProp' | sp }}  # will print someValue
 
 ```
   

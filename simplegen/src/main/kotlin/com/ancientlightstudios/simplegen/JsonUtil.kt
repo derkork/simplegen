@@ -48,15 +48,10 @@ object JsonUtil {
                     val updatedChildNode = updatedValue.get(i)
                     // Create a new Node in the node that should be updated, if there was no corresponding node in it
                     // Use-case - where the updateNode will have a new element in its Array
-                    if (valueToBeUpdated.size() <= i) {
-                        (valueToBeUpdated as ArrayNode).add(updatedChildNode)
-                    }
-                    // getting reference for the node to be updated
-                    val childNodeToBeUpdated = valueToBeUpdated.get(i)
-                    merge(childNodeToBeUpdated, updatedChildNode)
+                    (valueToBeUpdated as ArrayNode).add(updatedChildNode)
                 }
                 // if the Node is an @ObjectNode
-            } else if (valueToBeUpdated != null && valueToBeUpdated.isObject()) {
+            } else if (valueToBeUpdated != null && valueToBeUpdated.isObject) {
                 merge(valueToBeUpdated, updatedValue)
             } else {
                 if (mainNode is ObjectNode) {

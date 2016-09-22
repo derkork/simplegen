@@ -1,0 +1,12 @@
+entities:
+  - name: SampleEntity
+    properties:
+    - name: someString
+      type: java.lang.String
+      nullable: false
+      viewable: true
+
+    - name: someInt
+      type: int
+      nullable: false
+      viewable: true

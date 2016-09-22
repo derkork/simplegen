@@ -19,6 +19,19 @@ class TemplateEngineSpecs : Spek({
         }
     }
 
+    given("i have a template that used environment variables") {
+        System.setProperty("someKey", "someValue")
+        val template = "{{ 'someKey' | sp }}"
+
+        on("executing the template") {
+            val result = TemplateEngine.execute(template, emptyMap())
+
+            it("yields the proper result") {
+                assertEquals("someValue", result)
+            }
+        }
+    }
+
     given("i have a template with a jsonpath filter") {
 
         val data = YamlReader.readToMap("nestedprop:\n  prop2: value2\n".byteInputStream())
