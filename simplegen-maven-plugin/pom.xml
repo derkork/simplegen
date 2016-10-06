@@ -7,9 +7,11 @@
     <parent>
         <groupId>com.ancientlightstudios</groupId>
         <artifactId>simplegen-root</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+    <name>SimpleGen - Maven Plugin</name>
+    <description>SimpleGen is a simple code generator. This is the maven plugin which allows you to use SimpleGen with Maven.</description>
 
     <artifactId>simplegen-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>

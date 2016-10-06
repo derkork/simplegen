@@ -7,12 +7,15 @@
     <parent>
         <groupId>com.ancientlightstudios</groupId>
         <artifactId>simplegen-root</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>simplegen</artifactId>
     <packaging>jar</packaging>
+
+    <name>SimpleGen - Code Generator</name>
+    <description>SimpleGen is a simple code generator. This is the actual code generator.</description>
 
     <dependencies>
         <dependency>

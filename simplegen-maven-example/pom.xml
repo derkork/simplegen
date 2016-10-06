@@ -7,9 +7,12 @@
     <parent>
         <groupId>com.ancientlightstudios</groupId>
         <artifactId>simplegen-root</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <name>SimpleGen - Example Application</name>
+    <description>SimpleGen is a simple code generator. This is an example application that shows how to use SimpleGen.</description>
 
     <artifactId>simplegen-maven-example</artifactId>
     <packaging>jar</packaging>
