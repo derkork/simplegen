@@ -11,7 +11,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <name>SimpleGen - Maven Plugin</name>
-    <description>SimpleGen is a simple code generator. This is the maven plugin which allows you to use SimpleGen with Maven.</description>
+    <description>SimpleGen is a simple code generator. This is the maven plugin which allows you to use SimpleGen with
+        Maven.
+    </description>
 
     <artifactId>simplegen-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
@@ -46,7 +48,6 @@
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <groupId>org.jetbrains.kotlin</groupId>
-                <version>${kotlin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -75,4 +76,29 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jetbrains.dokka</groupId>
+                        <artifactId>dokka-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
