@@ -3,21 +3,13 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-
-    <parent>
-        <groupId>com.ancientlightstudios</groupId>
-        <artifactId>simplegen-root</artifactId>
-        <version>1.0.2</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
     <name>SimpleGen - Example Application</name>
     <description>SimpleGen is a simple code generator. This is an example application that shows how to use SimpleGen.</description>
 
     <artifactId>simplegen-maven-example</artifactId>
     <packaging>jar</packaging>
-
-    <modelVersion>4.0.0</modelVersion>
     <dependencies>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -41,7 +33,7 @@
             <plugin>
                 <groupId>com.ancientlightstudios</groupId>
                 <artifactId>simplegen-maven-plugin</artifactId>
-                <version>${project.version}</version>
+                <version>1.0.2</version>
                 <executions>
                     <execution>
                         <id>generate</id>
@@ -54,5 +46,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
