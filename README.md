@@ -1,8 +1,15 @@
 #SimpleGen -  A simple yet powerful general-purpose code generator
 
+[![Build Status](https://travis-ci.org/derkork/simplegen.svg?branch=master)](https://travis-ci.org/derkork/simplegen)
+
 This is an attempt to write a simple yet powerful general-purpose code generator. It is not specialized to any language,
 so whatever your target language is (may it be Java, Kotlin, C#, Ruby, JavaScript, HTML etc.), if it is text then 
 this generator should be able to create it.
+
+## Requirements
+
+* Java 8
+* Maven 3 if you'd like to use the maven plugin. 
 
 ## Usage
 
@@ -11,6 +18,37 @@ The generator can be used standalone or as a Maven plugin. In both cases it expe
 * ``config.yml`` - the configuration file
 * ``data.yml`` - a data file (you can choose any name you want, actually)
 * ``template.j2`` - at least one template
+
+
+## Running with Maven
+
+Simply add the Maven plugin to your build plugins:
+
+``` 
+    <build>
+        <plugins>
+            ...
+            <plugin>
+                <groupId>com.ancientlightstudios</groupId>
+                <artifactId>simplegen-maven-plugin</artifactId>
+                <version>1.0.2</version>
+                <executions>
+                    <execution>
+                        <id>generate</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            ...
+        </plugins>
+    </build>
+```
+
+The plugin expects the configuration files to reside in `src/main/simplegen` and will write its output to 
+`target/generated-sources/simplegen`.
 
 ### Configuration
 
