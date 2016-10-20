@@ -1,4 +1,4 @@
-package com.ancientlightstudios.simplegen
+package com.ancientlightstudios.simplegen.filters
 
 import com.hubspot.jinjava.interpret.JinjavaInterpreter
 import com.hubspot.jinjava.lib.filter.Filter

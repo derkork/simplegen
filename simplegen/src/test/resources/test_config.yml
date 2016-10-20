@@ -6,7 +6,7 @@ transformations:
 
       - includes: "**/*.yml"
         excludes: "**/narf.yml"
-        base_dir: data/foo
+        basePath: data/foo
 
       - includes:
           - "**/*.yml"
@@ -14,7 +14,7 @@ transformations:
         excludes:
           - "**/narf.yml"
           - "**/narf.yaml"
-        base_dir: data/bar
+        basePath: data/bar
 
 
   - template: template.j2

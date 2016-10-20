@@ -19,6 +19,14 @@ class FileUtilSpecs : Spek({
                 assertEquals(File(getResourcesRoot(), "template.j2").absolutePath, result[0].absolutePath)
             }
         }
+
+        on("using relative paths outside the base path") {
+            val result = FileUtil.resolve(getResourcesRoot(), "../${getResourcesRootFile().name}")
+
+            it ("still works") {
+                assertEquals(getResourcesRoot(), result.canonicalPath)
+            }
+        }
     }
 
 })

@@ -31,7 +31,7 @@ Simply add the Maven plugin to your build plugins:
             <plugin>
                 <groupId>com.ancientlightstudios</groupId>
                 <artifactId>simplegen-maven-plugin</artifactId>
-                <version>1.0.2</version>
+                <version>1.0.3</version>
                 <executions>
                     <execution>
                         <id>generate</id>
@@ -66,8 +66,8 @@ transformations:
       - **/*.yml
       # or even full-blown
       - includes: **/.yml
-        excluded: **/foo.yml
-        base_path: ../some/other/folder
+        excludes: **/foo.yml
+        basePath: ../some/other/folder
       
   	# Which template should be usd to render the data. Specify the path relative to the config.yml file.  
     template: template.j2
@@ -76,6 +76,18 @@ transformations:
     # What should be the output path of the file.
     outputPath: "{{ node.package | replace('.', '/') }}/{{ node.name }}.java"
 
+```
+
+Starting with version 1.0.3 you can use expressions in all fields of the configuration. So e.g. if you want to pull
+data from a folder set by a system property you can do it like this:
+
+```
+# Assuming you have set the system property 'input.path' to '/some/path'
+
+transformations:
+  - data: 
+      - includes: **/.yml
+        basePath: "{{ 'input.path' | sp }}"  # will set the basePath to /some/path
 ```
 
 ### Data
@@ -126,9 +138,12 @@ template is a Jinja2 template and in it you have access to two variables:
   that you want to share across templates.
   
 You can use every feature of the Jinja2 language including macros, includes, etc. When you include things remember that
-all paths must be specified relative to the ``config.yml`` file.  In addition to the standard filters, this package
-adds a jsonpath filter to the templating engine, so you can use jsonpath to effectively select interesting substructures
-of your data:
+all paths must be specified relative to the ``config.yml`` file.  
+
+#### Additional built-in filters
+
+In addition to the standard filters, this package adds a `jsonpath` filter to the template engine, so you can use 
+JSONPath to effectively select interesting substructures of your data:
 
 ```
 {% set private_fields = node | jsonpath("$.fields[?(@.visibility == 'private')]") %}
@@ -140,6 +155,28 @@ It is also possible to inject data through system properties using the `sp` filt
 ```
 # Assuming you have set a system property with -DsomeProp=someValue
 {{ 'someProp' | sp }}  # will print someValue
+
+```
+
+Finally a thing that is often required when generating code is case-changing of identifiers, so this package adds a
+custom filter for this as well. The syntax of this filter is:
+
+```
+	case( <input case>, <output case> )
+```
+
+Supported case formats are:
+
+* 'upper-camel' - FooBar
+* 'lower-camel' - fooBar
+* 'lower-hyphen' - foo-bar
+* 'upper-underscore' - FOO_BAR
+* 'lower-underscore' - foo_bar
+
+```
+{{ 'SomeString' | case('upper-camel', 'lower-hyphen') }} # will print 'some-string'
+{{ 'someString' | case('lower-camel', 'upper-camel') }} # will print 'SomeString'
+{{ 'some-string' | case('lower-hyphen', 'upper-camel') }} # will print 'SomeString'
 
 ```
   

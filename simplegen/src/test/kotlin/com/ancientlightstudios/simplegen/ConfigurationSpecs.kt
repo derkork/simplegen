@@ -13,21 +13,21 @@ class ConfigurationSpecs : Spek({
 
             it("yields a result for the simple case") {
                 assert(data.size > 0)
-                assertEquals("", data[0].baseDir)
+                assertEquals("", data[0].basePath)
                 assertEquals("data/data.yml", data[0].includes[0])
                 assert(data[0].excludes.isEmpty())
             }
 
             it("yields a result for single includes/excludes") {
                 assert(data.size > 1)
-                assertEquals("data/foo", data[1].baseDir)
+                assertEquals("data/foo", data[1].basePath)
                 assertEquals("**/*.yml", data[1].includes[0])
                 assertEquals("**/narf.yml", data[1].excludes[0])
             }
 
             it("yields a result for multiple includes/excludes") {
                 assert(data.size > 2)
-                assertEquals("data/bar", data[2].baseDir)
+                assertEquals("data/bar", data[2].basePath)
                 assertEquals("**/*.yml", data[2].includes[0])
                 assertEquals("**/*.yaml", data[2].includes[1])
                 assertEquals("**/narf.yml", data[2].excludes[0])
@@ -40,7 +40,7 @@ class ConfigurationSpecs : Spek({
 
             it("supports specifying data directly at the node without a list") {
                 assertEquals(1, data.size)
-                assertEquals("", data[0].baseDir)
+                assertEquals("", data[0].basePath)
                 assertEquals("data/data.yml", data[0].includes[0])
                 assert(data[0].excludes.isEmpty())
             }

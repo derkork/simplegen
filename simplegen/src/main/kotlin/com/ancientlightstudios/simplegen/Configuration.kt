@@ -23,7 +23,7 @@ class Configuration(val transformations: List<Transformation> = emptyList<Transf
                     }
 
                     if (item is Map<*, *>) {
-                        val baseDir = item["base_dir"] as String?
+                        val baseDir = item["basePath"] as String?
                         val includes = asList(item["includes"])
                         val excludes = asList(item["excludes"])
 
@@ -51,7 +51,7 @@ class Configuration(val transformations: List<Transformation> = emptyList<Transf
             return emptyList()
         }
 
-        class DataSpec(val baseDir: String, val includes: List<String>, val excludes: List<String>) {
+        class DataSpec(val basePath: String, val includes: List<String>, val excludes: List<String>) {
         }
     }
 }

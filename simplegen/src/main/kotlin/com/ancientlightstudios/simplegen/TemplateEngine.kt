@@ -1,5 +1,8 @@
 package com.ancientlightstudios.simplegen
 
+import com.ancientlightstudios.simplegen.filters.CaseFilter
+import com.ancientlightstudios.simplegen.filters.JsonPathFilter
+import com.ancientlightstudios.simplegen.filters.SystemPropertyFilter
 import com.hubspot.jinjava.Jinjava
 import org.slf4j.LoggerFactory
 
@@ -20,6 +23,7 @@ object TemplateEngine {
         templateEngine.resourceLocator = RepositoryFileLocator(templateBasePaths)
         templateEngine.globalContext.registerFilter(JsonPathFilter())
         templateEngine.globalContext.registerFilter(SystemPropertyFilter())
+        templateEngine.globalContext.registerFilter(CaseFilter())
         return templateEngine.render(input, context)
     }
 }
