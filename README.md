@@ -19,6 +19,15 @@ The generator can be used standalone or as a Maven plugin. In both cases it expe
 * ``data.yml`` - a data file (you can choose any name you want, actually)
 * ``template.j2`` - at least one template
 
+## Running through the command line
+You can invoke the code generator by running:
+
+```
+java -jar simplegen-<version>.jar --sourceDirectory <path to input structure> --outputDirectory <path for generated files>
+```
+
+This will read the input structure from the input directory, generate the code and place the generated files in the
+output directory.  
 
 ## Running with Maven
 
