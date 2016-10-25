@@ -1,4 +1,7 @@
 language: java
+script:
+  - "mvn -Pstandalone-app -DskipTests=true -Dmaven.javadoc.skip=true -B -V install"
+  - "mvn test -B"
 jdk:
 - oraclejdk8
 deploy:
@@ -6,7 +9,7 @@ deploy:
   api_key:
     secure: Clz++Qaa+nIyH1apaVmBh6LKzQFvIS0xd5fCk1Xqy9m8Y1qaePpHgKoQvJaLlOD/pKwWf8P46laXLmwhdK5kC6K6QB09PMeZMksDqXEjQpf3GWFZxOcQyGvCC0OILVdIxm7rS2/vrdRFttVbW3py8CTMuKixhZ1HojTRzfQ6tksUZGJIDhS4IELTAJZIQHMNWoZSFwrDdmJu7u/J8Xecz7O6GAmWU3+J1F1jXA8OXlkpiK6kGEpqkCg/rmvhX+VKo4ZvN9uPUEVJljP0ycV2Vci4S0wTAhPKF8XYadcvcCl/+UEyuWCRlkotA0ZL6EZOZw1BxWjzgKfKSJzIfjOyNsSddc1EdpYjLU1eO1MF3rgXJ2O+hNUr1p0AJNYBFlZW7RI+ENMF9HtkJ4x4yHqsRT9fZC7ACjK6SRex9ySSYGXc3HhQCWUw/9fex5vzArsWxoYTh6oS6VEnwFdJ1uoc02AFToGJH30lI4MkGVVFF8cweBRPKkFQ/tLNL/37O4IpIyBjde+uSpHZUOwHpw+ziV30lkmo6iEvv362gWF4o83xTiTPWkoxTUBlH9P7yUHDW5XShedWhqkM5tJ25Qug69VYSxjGlKZYgVO0jwqRPaiBeoRV3ITAq4a6/qevv/AbillVBpgVglP0fOiJOYjsjoar7qJc3ZXaK/GMmk2hAjU=
   file_glob: true
-  file: "target/simplegen-*.jar"
+  file: "simplegen/target/simplegen-*.jar"
   on:
     repo: derkork/simplegen
     tags: true
