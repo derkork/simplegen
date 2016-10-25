@@ -20,7 +20,8 @@ The generator can be used standalone or as a Maven plugin. In both cases it expe
 * ``template.j2`` - at least one template
 
 ## Running through the command line
-You can invoke the code generator by running:
+To use the generator through the command line, [download the latest version](https://github.com/derkork/simplegen/releases/latest) 
+from GitHub. Then you can invoke the code generator by running:
 
 ```
 java -jar simplegen-<version>.jar --sourceDirectory <path to input structure> --outputDirectory <path for generated files>
