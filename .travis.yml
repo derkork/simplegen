@@ -1,7 +1,6 @@
 language: java
 install:
   - "mvn -Pstandalone-app -DskipTests=true -Dmaven.javadoc.skip=true -B -V install"
-  - "mvn test -B"
 jdk:
 - oraclejdk8
 deploy:
