@@ -1,8 +1,8 @@
 package com.ancientlightstudios.simplegen
 
 
-class Configuration(val transformations: List<Transformation> = emptyList<Transformation>()) {
-    class Transformation(val template: String = "", val data: Any = emptyList<Any>(), val nodes: String = "", val outputPath: String = "") {
+class Configuration(val transformations: List<Transformation> = emptyList<Transformation>(), val templateEngine: TemplateEngineConfiguration = TemplateEngineConfiguration()) {
+    class Transformation(val template: String = "", val data: Any = emptyList<Any>(), val nodes: String = "", val outputPath: String = "", val templateEngine: TemplateEngineConfiguration? = null) {
 
         private var parsedData: List<DataSpec>? = null
 
@@ -15,7 +15,7 @@ class Configuration(val transformations: List<Transformation> = emptyList<Transf
 
                 val list = mutableListOf<DataSpec>()
 
-                val input = if (data is List<*>) data else listOf(data)
+                val input = data as? List<*> ?: listOf(data)
 
                 for (item in input) {
                     if (item is String) {
@@ -51,7 +51,7 @@ class Configuration(val transformations: List<Transformation> = emptyList<Transf
             return emptyList()
         }
 
-        class DataSpec(val basePath: String, val includes: List<String>, val excludes: List<String>) {
-        }
+        class DataSpec(val basePath: String, val includes: List<String>, val excludes: List<String>)
     }
+
 }

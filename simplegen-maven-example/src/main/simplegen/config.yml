@@ -1,3 +1,7 @@
+templateEngine:
+  trimBlocks: true
+  lstripBlocks: true
+
 transformations:
   - data:
       - data.yml

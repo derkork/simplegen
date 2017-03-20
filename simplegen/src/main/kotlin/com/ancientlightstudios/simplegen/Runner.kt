@@ -3,7 +3,7 @@ package com.ancientlightstudios.simplegen
 
 class Runner(private val basePath: String = ".", configPath: String = "config.yml", private val outputFolder: String = ".") {
     private lateinit var config: Configuration
-    private lateinit var materializer : Materializer
+    private var materializer : Materializer
 
 
     init {
@@ -21,14 +21,14 @@ class Runner(private val basePath: String = ".", configPath: String = "config.ym
 
     fun run() {
         val materializedTransformations = materializer.materialize(config)
-        for ((template, data, node, outputPath) in materializedTransformations) {
+        for ((template, data, node, outputPath, engineConfiguration) in materializedTransformations) {
             val outputFile = FileUtil.resolve(outputFolder, outputPath)
             val parent = outputFile.parentFile
             if (!parent.exists()) {
                 parent.mkdirs()
             }
 
-            val result = TemplateEngine.execute(template, node, data, basePath)
+            val result = TemplateEngine.execute(template, node, data, basePath, engineConfiguration)
             outputFile.writeText(result)
         }
     }

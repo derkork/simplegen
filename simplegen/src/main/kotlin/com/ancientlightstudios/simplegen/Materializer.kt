@@ -8,9 +8,9 @@ class Materializer(val basePath: String) {
 
     val log = LoggerFactory.getLogger(Materializer::class.java)
 
-    fun materialize(source: Configuration): List<MaterializedTransformation> = source.transformations.flatMap { materialize(it) }
+    fun materialize(source: Configuration): List<MaterializedTransformation> = source.transformations.flatMap { materialize(source, it) }
 
-    private fun materialize(source: Configuration.Transformation): List<MaterializedTransformation> {
+    private fun materialize(configuration: Configuration, source: Configuration.Transformation): List<MaterializedTransformation> {
         log.debug("Reading data from source files.")
 
         val dataMaps = source.getParsedData()
@@ -58,7 +58,12 @@ class Materializer(val basePath: String) {
             val templateSource = TemplateEngine.execute(source.template, node, data, basePath)
             val templateText = FileUtil.resolve(basePath, templateSource).readText()
 
-            result.add(MaterializedTransformation(templateText, data, node, outputFile))
+
+            var engineConfiguration = source.templateEngine
+            if (engineConfiguration == null) {
+                engineConfiguration = configuration.templateEngine
+            }
+            result.add(MaterializedTransformation(templateText, data, node, outputFile, engineConfiguration))
         }
         return result
     }

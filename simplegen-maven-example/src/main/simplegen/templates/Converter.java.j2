@@ -12,12 +12,11 @@ public class {{ node.name }}Converter
 	{{macros.nullable(false)}}
 	public {{ node.name }}View convert({{macros.nullable(false)}} {{ node.name }} input) {
 		{{ node.name }}View result = new {{ node.name }}View();
-		{% for prop in node.properties -%}
-			{% if prop.viewable -%}
+		{% for prop in node.properties %}
+			{% if prop.viewable %}
 				result.set{{ prop.name | title }}(input.get{{ prop.name | title}}());
-			{%- endif %}
-		{%- endfor %}
+			{% endif %}
+		{% endfor %}
 		return result;
-
 	}
 }

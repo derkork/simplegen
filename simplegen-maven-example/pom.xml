@@ -8,7 +8,9 @@
     <name>SimpleGen - Example Application</name>
     <description>SimpleGen is a simple code generator. This is an example application that shows how to use SimpleGen.</description>
 
+    <groupId>com.ancientlightstudios</groupId>
     <artifactId>simplegen-maven-example</artifactId>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -33,7 +35,7 @@
             <plugin>
                 <groupId>com.ancientlightstudios</groupId>
                 <artifactId>simplegen-maven-plugin</artifactId>
-                <version>1.0.3</version>
+                <version>1.0.4</version>
                 <executions>
                     <execution>
                         <id>generate</id>
