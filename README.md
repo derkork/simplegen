@@ -1,4 +1,4 @@
-#SimpleGen -  A simple yet powerful general-purpose code generator
+# SimpleGen -  A simple yet powerful general-purpose code generator
 
 [![Build Status](https://travis-ci.org/derkork/simplegen.svg?branch=master)](https://travis-ci.org/derkork/simplegen)
 
@@ -99,6 +99,32 @@ transformations:
       - includes: **/.yml
         basePath: "{{ 'input.path' | sp }}"  # will set the basePath to /some/path
 ```
+
+Starting with version 1.0.4 you can now also configure the template engine within `config.yml`. The template engine
+configuration is optional, if you leave it out, all values will be initialized with `false` (as it was the default
+for the previous version of simplegen where this configuration option didn't exist). You can have a global configuration 
+for all transformations which you can override per transformation like this:
+
+```
+# This is the global configuration. 
+templateEngine:
+    trimBlocks: true
+    lstripBlocks: true
+    enableRecursiveMacroCalls: true
+    
+transformations:
+   - data: 
+        - data.yml
+     ...
+     templateEngine:
+        # This is a configuration for this single transformation, only.
+        trimBlocks: false
+        lstripBlocks: false
+        enableRecursiveMacroCalls: false
+
+```
+
+
 
 ### Data
 
