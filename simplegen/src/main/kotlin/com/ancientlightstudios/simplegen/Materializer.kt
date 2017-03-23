@@ -1,26 +1,39 @@
 package com.ancientlightstudios.simplegen
 
+import com.ancientlightstudios.simplegen.configuration.Configuration
+import com.ancientlightstudios.simplegen.configuration.TemplateEngineConfiguration
+import com.ancientlightstudios.simplegen.configuration.Transformation
+import com.ancientlightstudios.simplegen.resources.FileResolver
+import com.ancientlightstudios.simplegen.resources.SimpleFileResolver
 import com.jayway.jsonpath.JsonPath
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 
-class Materializer(val basePath: String) {
+class Materializer(val fileResolver: FileResolver) {
 
-    val log = LoggerFactory.getLogger(Materializer::class.java)
+    val log: Logger = LoggerFactory.getLogger(Materializer::class.java)
 
     fun materialize(source: Configuration): List<MaterializedTransformation> = source.transformations.flatMap { materialize(source, it) }
 
-    private fun materialize(configuration: Configuration, source: Configuration.Transformation): List<MaterializedTransformation> {
+    private fun materialize(configuration: Configuration, source: Transformation): List<MaterializedTransformation> {
+
+        val filters = configuration.customFilters.map { FilterBuilder.buildFilter(it, fileResolver) }
+        val templateEngineArguments = TemplateEngineArguments(TemplateEngineConfiguration(), filters)
+        val templateEngine = TemplateEngine(fileResolver, templateEngineArguments)
+
         log.debug("Reading data from source files.")
 
         val dataMaps = source.getParsedData()
                 .flatMap {
                     // we template all input now.
-                    val baseDir = TemplateEngine.execute(it.basePath, emptyMap(), listOf(basePath))
-                    val includes = it.includes.map { TemplateEngine.execute(it, emptyMap(), listOf(basePath)) }
-                    val excludes = it.excludes.map { TemplateEngine.execute(it, emptyMap(), listOf(basePath)) }
-                    FileUtil.resolve(
-                            FileUtil.resolve(basePath, baseDir).canonicalPath, includes, excludes)
+                    val baseDir = templateEngine.execute(it.basePath, emptyMap())
+                    val includes = it.includes.map { templateEngine.execute(it, emptyMap()) }
+                    val excludes = it.excludes.map { templateEngine.execute(it, emptyMap()) }
+
+                    val baseDirAsFile = fileResolver.resolve(baseDir)
+                    val customResolver = SimpleFileResolver(baseDirAsFile.canonicalPath)
+                    customResolver.resolve(includes, excludes)
                 }
                 .map { it.inputStream().use { YamlReader.readToMap(it) } }
                 .toTypedArray()
@@ -54,9 +67,9 @@ class Materializer(val basePath: String) {
 
             node ?: throw IllegalStateException("Unexpected null node.")
 
-            val outputFile = TemplateEngine.execute(source.outputPath, node, data, basePath)
-            val templateSource = TemplateEngine.execute(source.template, node, data, basePath)
-            val templateText = FileUtil.resolve(basePath, templateSource).readText()
+            val outputFile = templateEngine.execute(source.outputPath, node, data)
+            val templateSource = templateEngine.execute(source.template, node, data)
+            val templateText =  fileResolver.resolve(templateSource).readText()
 
 
             var engineConfiguration = source.templateEngine

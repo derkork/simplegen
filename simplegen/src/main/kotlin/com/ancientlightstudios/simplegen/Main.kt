@@ -2,7 +2,6 @@ package com.ancientlightstudios.simplegen
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
 
 object CommandLineArgs {
     @Parameter(names=arrayOf("--sourceDirectory", "-s"), description = "Directory which contains the config.yml file.")

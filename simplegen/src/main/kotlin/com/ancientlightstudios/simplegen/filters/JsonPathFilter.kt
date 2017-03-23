@@ -11,7 +11,7 @@ class JsonPathFilter : Filter {
     override fun getName(): String = "jsonpath"
 
     override fun filter(obj: Any?, interpreter: JinjavaInterpreter?, vararg args: String?): Any? {
-        if (args.size < 1) {
+        if (args.isEmpty()) {
             return obj
         }
 

@@ -1,5 +1,7 @@
 package com.ancientlightstudios.simplegen
 
+import com.ancientlightstudios.simplegen.configuration.Configuration
+import com.ancientlightstudios.simplegen.resources.SimpleFileResolver
 import org.jetbrains.spek.api.Spek
 import kotlin.test.assertEquals
 
@@ -7,7 +9,7 @@ class MaterializerSpecs : Spek({
 
     given("i have a read test configuration") {
         val configuration = YamlReader.readToPojo(getTestConfig().inputStream(), Configuration::class.java)
-        val materializer = Materializer(getResourcesRoot())
+        val materializer = Materializer(SimpleFileResolver(getResourcesRoot()))
 
         on("materializing the configuration") {
             val result = materializer.materialize(configuration)

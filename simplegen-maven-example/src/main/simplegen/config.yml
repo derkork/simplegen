@@ -2,31 +2,35 @@ templateEngine:
   trimBlocks: true
   lstripBlocks: true
 
+customFilters:
+  - script: filters/package2path.js
+    function: package2path
+
 transformations:
   - data:
       - data.yml
       - entities/*.yml
     template: templates/Entity.java.j2
     nodes: entities
-    outputPath: "{{ data.base_package | replace('.', '/') }}/entities/{{ node.name }}.java"
+    outputPath: "{{ data.base_package | package2path }}/entities/{{ node.name }}.java"
 
   - data:
       - data.yml
       - entities/*.yml
     template: templates/Dao.java.j2
     nodes: entities
-    outputPath: "{{ data.base_package | replace('.', '/') }}/daos/{{ node.name }}Dao.java"
+    outputPath: "{{ data.base_package | package2path }}/daos/{{ node.name }}Dao.java"
 
   - data:
       - data.yml
       - entities/*.yml
     template: templates/View.java.j2
     nodes: entities
-    outputPath: "{{ data.base_package | replace('.', '/') }}/views/{{ node.name }}View.java"
+    outputPath: "{{ data.base_package | package2path }}/views/{{ node.name }}View.java"
 
   - data:
       - data.yml
       - entities/*.yml
     template: templates/Converter.java.j2
     nodes: entities
-    outputPath: "{{ data.base_package | replace('.', '/') }}/converters/{{ node.name }}Converter.java"
+    outputPath: "{{ data.base_package | package2path }}/converters/{{ node.name }}Converter.java"

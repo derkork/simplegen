@@ -6,7 +6,7 @@ class JsonUtilSpecs : Spek({
 
     given("i have two simple maps") {
 
-        val node1 = mapOf<String, Any>(
+        val node1 = mapOf(
                 "narf" to mapOf<String, Any>(
                         "narf" to "barf"
                 ),

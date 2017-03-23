@@ -1,5 +1,7 @@
 package com.ancientlightstudios.simplegen
 
+import com.ancientlightstudios.simplegen.configuration.TemplateEngineConfiguration
+
 
 /**
  * This is a materialized transformation that contains everything needed to actually perform the transformation.

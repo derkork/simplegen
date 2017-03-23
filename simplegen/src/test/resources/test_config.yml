@@ -1,3 +1,12 @@
+templateEngine:
+  trimBlocks: true
+  lstripBlocks: true
+  enableRecursiveMacroCalls: true
+
+customFilters:
+  - script: filters/reverse_filter.js
+    function: reverse
+
 transformations:
   - template: template.j2
     nodes: nodes
@@ -20,3 +29,7 @@ transformations:
   - template: template.j2
     nodes: nodes
     data: data/data.yml
+    templateEngine:
+      trimBlocks: true
+      lstripBlocks: true
+      enableRecursiveMacroCalls: true

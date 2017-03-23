@@ -1,5 +1,6 @@
 package com.ancientlightstudios.simplegen
 
+import com.ancientlightstudios.simplegen.resources.FileUtil
 import org.jetbrains.spek.api.Spek
 import java.io.File
 import kotlin.test.assertEquals
@@ -12,7 +13,7 @@ class FileUtilSpecs : Spek({
             val result = FileUtil.resolve(getResourcesRoot(), listOf("**/*.j2"), emptyList())
 
             it("yields one result") {
-                result.size == 1
+                assertEquals(1, result.size)
             }
 
             it("yields absolute paths") {

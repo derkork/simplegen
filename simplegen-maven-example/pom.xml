@@ -10,7 +10,7 @@
 
     <groupId>com.ancientlightstudios</groupId>
     <artifactId>simplegen-maven-example</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -35,7 +35,7 @@
             <plugin>
                 <groupId>com.ancientlightstudios</groupId>
                 <artifactId>simplegen-maven-plugin</artifactId>
-                <version>1.0.4</version>
+                <version>1.0.5</version>
                 <executions>
                     <execution>
                         <id>generate</id>

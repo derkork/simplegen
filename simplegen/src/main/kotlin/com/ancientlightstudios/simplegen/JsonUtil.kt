@@ -18,7 +18,7 @@ object JsonUtil {
             return maps[0]
         }
 
-        if (maps.size == 0) {
+        if (maps.isEmpty()) {
             throw IllegalArgumentException("Must give at least two nodes to merge.")
         }
 
@@ -44,6 +44,7 @@ object JsonUtil {
             // If the node is an @ArrayNode
             if (valueToBeUpdated != null && updatedValue.isArray) {
                 // running a loop for all elements of the updated ArrayNode
+                @Suppress("LoopToCallChain")
                 for (i in 0..updatedValue.size() - 1) {
                     val updatedChildNode = updatedValue.get(i)
                     // Create a new Node in the node that should be updated, if there was no corresponding node in it

@@ -1,5 +1,6 @@
 package com.ancientlightstudios.simplegen
 
+import com.ancientlightstudios.simplegen.configuration.Configuration
 import org.jetbrains.spek.api.Spek
 import kotlin.test.assertEquals
 

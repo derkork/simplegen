@@ -1,4 +1,4 @@
-package com.ancientlightstudios.simplegen
+package com.ancientlightstudios.simplegen.resources
 
 import org.apache.tools.ant.DirectoryScanner
 import org.slf4j.Logger

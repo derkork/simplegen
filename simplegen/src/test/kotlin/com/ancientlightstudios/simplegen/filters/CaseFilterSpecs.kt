@@ -1,6 +1,5 @@
-package com.ancientlightstudios.simplegen
+package com.ancientlightstudios.simplegen.filters
 
-import com.ancientlightstudios.simplegen.filters.CaseFilter
 import org.jetbrains.spek.api.Spek
 import kotlin.test.assertEquals
 
