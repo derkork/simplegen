@@ -79,7 +79,7 @@ transformations:
         excludes: **/foo.yml
         basePath: ../some/other/folder
       
-  	# Which template should be usd to render the data. Specify the path relative to the config.yml file.  
+    # Which template should be usd to render the data. Specify the path relative to the config.yml file.  
     template: template.j2
     # For which nodes in the data should the template be executed. This is a JsonPath.
     nodes: myclasses
