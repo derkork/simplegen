@@ -34,14 +34,14 @@ output directory.
 
 Simply add the Maven plugin to your build plugins:
 
-``` 
+```xml 
     <build>
         <plugins>
             ...
             <plugin>
                 <groupId>com.ancientlightstudios</groupId>
                 <artifactId>simplegen-maven-plugin</artifactId>
-                <version>1.0.4</version>
+                <version>1.0.5</version>
                 <executions>
                     <execution>
                         <id>generate</id>
@@ -65,7 +65,7 @@ The plugin expects the configuration files to reside in `src/main/simplegen` and
 The generator will read instructions from the configuration file and execute them in the order specified there. Instructions
 look like this:
 
-```
+```yaml
 transformations:
   
     # From where to pull the data. You can actually pull more than one, in which case their contents get merged.
@@ -91,7 +91,7 @@ transformations:
 Starting with version 1.0.3 you can use expressions in all fields of the configuration. So e.g. if you want to pull
 data from a folder set by a system property you can do it like this:
 
-```
+```yaml
 # Assuming you have set the system property 'input.path' to '/some/path'
 
 transformations:
@@ -105,7 +105,7 @@ configuration is optional, if you leave it out, all values will be initialized w
 for the previous version of simplegen where this configuration option didn't exist). You can have a global configuration 
 for all transformations which you can override per transformation like this:
 
-```
+```yaml
 # This is the global configuration. 
 templateEngine:
     trimBlocks: true
@@ -131,7 +131,7 @@ transformations:
 Now you need a data file which gives the generator a data model to work on. In this example let's create
 empty java classes from a model. The data file for this could look like this:
 
-```
+```yaml
 myclasses:
   - package: com.ancientlightstudios.myapp
     name: SomeClass
@@ -215,6 +215,45 @@ Supported case formats are:
 {{ 'some-string' | case('lower-hyphen', 'upper-camel') }} # will print 'SomeString'
 
 ```
+
+#### Custom filters
+
+Starting with version 1.0.5 you can write custom per-project filters in JavaScript. A filter is simply a javascript 
+function that receives objects and works on them. The functions will be executed inside the Rhino scripting engine
+so you can use all of it's functionality (including full access to the Java API) in your scripts. The function has 
+three arguments:
+
+```javascript
+// a simple do-nothing filter that just returns the argument.
+function myFilter(input, interpreter, arguments) {
+    return input;
+}
+```
+
+The arguments are:
+* `input` - the object to filter
+* `interpreter` - an instance of `com.hubspot.jinjava.interpret.JinjavaInterpreter`.
+* `arguments` - the arguments given to the filter in the template (an array of string objects)
+
+To register your custom filter, add the following to your `config.yml`:
+
+```yaml
+customFilters:
+   # Path to the script file containing the filter function, relative to config.yml
+ - script: filters/myFilter.js
+   # Name of the filter function. This is also the name that will be used for the filter inside the template engine.
+   function: myFilter
+
+  # more custom filters..
+
+```
+  
+Then you can use your filter inside your templates like this:
+
+```
+{{ someVariable | myFilter('some argument') }}
+```
+  
   
 You can find a larger example in [simplegen-maven-example!](simplegen-maven-example/)
 
