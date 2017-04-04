@@ -21,7 +21,7 @@ class ScriptFilter(script: String, val function: String) : Filter {
         return function
     }
 
-    override fun filter(obj: Any?, interpreter: JinjavaInterpreter?, vararg args: String?): Any {
+    override fun filter(obj: Any?, interpreter: JinjavaInterpreter?, vararg args: String?): Any? {
         return (engine as Invocable).invokeFunction(function, obj, interpreter, args)
     }
 }
