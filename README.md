@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/derkork/simplegen.svg?branch=master)](https://travis-ci.org/derkork/simplegen)
 
-This is an attempt to write a simple yet powerful general-purpose code generator. It is not specialized to any language,
+SimpleGen is a simple yet powerful general-purpose code generator. It is not specialized to any language,
 so whatever your target language is (may it be Java, Kotlin, C#, Ruby, JavaScript, HTML, CSS, etc.) - if it is text then 
 this generator should be able to create it. SimpleGen has been used successfully in several projects to help create 
 repetitive or boilerplate code (e.g. JPA entity definitions or JavaScript rest clients), test data and even static 
@@ -255,7 +255,7 @@ Finally a thing that is often required when generating code is case-changing of 
 custom filter for this as well. The syntax of this filter is:
 
 ```jinja2
-	case( <input case>, <output case> )
+case( <input case>, <output case> )
 ```
 
 Supported case formats are:
@@ -298,7 +298,7 @@ customFilters:
    # Path to the script file containing the filter function, relative to config.yml
  - script: filters/myFilter.js
    # Name of the filter function. This is also the name that will be used for the filter inside the template engine.
-   function: myFilter
+   function: times
 
   # more custom filters..
 
