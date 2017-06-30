@@ -27,15 +27,15 @@ class Materializer(val fileResolver: FileResolver) {
         val dataMaps = source.getParsedData()
                 .flatMap {
                     // we template all input now.
-                    val baseDir = templateEngine.execute(it.basePath, emptyMap())
-                    val includes = it.includes.map { templateEngine.execute(it, emptyMap()) }
-                    val excludes = it.excludes.map { templateEngine.execute(it, emptyMap()) }
+                    val baseDir = templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> data -> basePath",  it.basePath))
+                    val includes = it.includes.map { templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> data -> includes",it)) }
+                    val excludes = it.excludes.map { templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> data -> excludes", it)) }
 
                     val baseDirAsFile = fileResolver.resolve(baseDir)
                     val customResolver = SimpleFileResolver(baseDirAsFile.canonicalPath)
                     customResolver.resolve(includes, excludes)
                 }
-                .map { it.inputStream().use { YamlReader.readToMap(it) } }
+                .map { val file = it; file.inputStream().use { YamlReader.readToMap(file.path, it) } }
                 .toTypedArray()
 
         val data: Map<String, Any>
@@ -46,7 +46,7 @@ class Materializer(val fileResolver: FileResolver) {
             if (log.isDebugEnabled) {
                 log.debug("Merging data from ${dataMaps.size} source files.")
                 for (dataMap in dataMaps) {
-                    log.info("Source: $dataMap")
+                    log.debug("Source: $dataMap")
                 }
             }
             data = JsonUtil.merge(*dataMaps)
@@ -67,8 +67,8 @@ class Materializer(val fileResolver: FileResolver) {
 
             node ?: throw IllegalStateException("Unexpected null node.")
 
-            val outputFile = templateEngine.execute(source.outputPath, node, data)
-            val templateSource = templateEngine.execute(source.template, node, data)
+            val outputFile = templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> outputPath", source.outputPath).with( data, node))
+            val templateSource = templateEngine.execute(TemplateEngineJob( "config.yml -> transformations -> template", source.template).with(data, node))
             val templateText =  fileResolver.resolve(templateSource).readText()
 
 
@@ -76,7 +76,7 @@ class Materializer(val fileResolver: FileResolver) {
             if (engineConfiguration == null) {
                 engineConfiguration = configuration.templateEngine
             }
-            result.add(MaterializedTransformation(templateText, data, node, outputFile, engineConfiguration))
+            result.add(MaterializedTransformation(templateSource, templateText, data, node, outputFile, engineConfiguration))
         }
         return result
     }

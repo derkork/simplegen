@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 class MaterializerSpecs : Spek({
 
     given("i have a read test configuration") {
-        val configuration = YamlReader.readToPojo(getTestConfig().inputStream(), Configuration::class.java)
+        val configuration = YamlReader.readToPojo(getTestConfig().path, getTestConfig().inputStream(), Configuration::class.java)
         val materializer = Materializer(SimpleFileResolver(getResourcesRoot()))
 
         on("materializing the configuration") {

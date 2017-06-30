@@ -19,6 +19,6 @@ object FilterBuilder {
            throw IllegalArgumentException("The filter's function name cannot be empty.")
         }
 
-        return ScriptFilter(script, function)
+        return ScriptFilter(customFilterConfiguration.script, script, function)
     }
 }

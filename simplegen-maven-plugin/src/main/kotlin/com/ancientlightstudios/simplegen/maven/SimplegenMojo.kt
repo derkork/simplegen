@@ -2,6 +2,7 @@ package com.ancientlightstudios.simplegen.maven
 
 import com.ancientlightstudios.simplegen.Runner
 import org.apache.maven.plugin.AbstractMojo
+import org.apache.maven.plugin.MojoFailureException
 import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
@@ -39,7 +40,9 @@ class SimplegenMojo : AbstractMojo() {
 
     override fun execute() {
         log.info("Generating sources from ${File(sourceDirectory, configFileName).path} to ${outputDirectory.path}")
-        Runner(sourceDirectory.path, configFileName, outputDirectory.path).run()
+        if (!Runner(sourceDirectory.path, configFileName, outputDirectory.path).run()) {
+            throw MojoFailureException("There were errors running SimpleGen.")
+        }
         project.addCompileSourceRoot(outputDirectory.path)
     }
 

@@ -7,7 +7,7 @@ import com.ancientlightstudios.simplegen.resources.FileResolver
 import com.hubspot.jinjava.Jinjava
 import com.hubspot.jinjava.JinjavaConfig
 
-class TemplateEngine(fileResolver: FileResolver, arguments: TemplateEngineArguments) {
+class TemplateEngine(fileResolver: FileResolver, arguments: TemplateEngineArguments = TemplateEngineArguments()) {
 
     private val templateEngine : Jinjava
 
@@ -27,11 +27,11 @@ class TemplateEngine(fileResolver: FileResolver, arguments: TemplateEngineArgume
     }
 
 
-    fun execute(input: String, node: Any, data: Any): String {
-        return execute(input, mapOf("data" to data, "node" to node))
-    }
-
-    fun execute(input: String, context: Map<String, Any>): String {
-        return templateEngine.render(input, context)
+    fun execute(job: TemplateEngineJob): String {
+        val result = templateEngine.renderForResult(job.template, job.context)
+        if (result.hasErrors()) {
+            throw TemplateErrorException(job, result)
+        }
+        return result.output
     }
 }
