@@ -46,7 +46,6 @@ fun main(args: Array<String>) {
         System.exit(1)
     }
     else {
-        log.info("Generation complete.")
         System.exit(0)
     }
 }

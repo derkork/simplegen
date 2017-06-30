@@ -37,6 +37,7 @@ class Runner(val basePath: String = ".", val configPath: String = "config.yml", 
             val filters = config.customFilters.map { FilterBuilder.buildFilter(it, fileResolver) }
 
             log.info("Processing ${materializedTransformations.size} transformations...")
+
             for ((templateSource, template, data, node, outputPath, engineConfiguration) in materializedTransformations) {
                 log.debug("Rendering $templateSource into $outputPath.")
                 val outputFile = FileUtil.resolve(outputFolder, outputPath)
@@ -51,7 +52,7 @@ class Runner(val basePath: String = ".", val configPath: String = "config.yml", 
                 val result = templateEngine.execute(TemplateEngineJob(templateSource, template).with(data, node))
                 outputFile.writeText(result)
             }
-
+            log.info("Generation complete.")
             return true
         } catch(e: TemplateErrorException) {
             handle(e)
