@@ -8,7 +8,7 @@ import kotlin.test.assertNotNull
 class ConfigurationSpecs : Spek({
 
     given("i have a read test configuration and a materializer") {
-        val configuration = YamlReader.readToPojo(getTestConfig().inputStream(), Configuration::class.java)
+        val configuration = YamlReader.readToPojo(getTestConfig().path, getTestConfig().inputStream(), Configuration::class.java)
 
         on("reading the configuration") {
             it("reads global engine configuration") {

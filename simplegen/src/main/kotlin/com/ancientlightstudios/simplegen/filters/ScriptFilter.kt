@@ -9,11 +9,12 @@ import javax.script.ScriptEngineManager
 /**
  * A filter that executes a JavaScript.
  */
-class ScriptFilter(script: String, private val function: String) : Filter {
+class ScriptFilter(val source: String, script: String, val function: String) : Filter {
 
-    private val engine:ScriptEngine = ScriptEngineManager().getEngineByName("nashorn")
+    val engine:ScriptEngine = ScriptEngineManager().getEngineByName("nashorn")
 
     init {
+        engine.put(ScriptEngine.FILENAME, source)
         engine.eval(script)
     }
 
