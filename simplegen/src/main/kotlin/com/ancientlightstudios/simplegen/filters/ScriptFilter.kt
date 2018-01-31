@@ -9,16 +9,16 @@ import javax.script.ScriptEngineManager
 /**
  * A filter that executes a JavaScript.
  */
-class ScriptFilter(script: String, val function: String) : Filter {
+class ScriptFilter(script: String, private val function: String) : Filter {
 
-    val engine:ScriptEngine = ScriptEngineManager().getEngineByName("nashorn")
+    private val engine:ScriptEngine = ScriptEngineManager().getEngineByName("nashorn")
 
     init {
         engine.eval(script)
     }
 
     override fun getName(): String {
-        return function
+        return function.toLowerCase()
     }
 
     override fun filter(obj: Any?, interpreter: JinjavaInterpreter?, vararg args: String?): Any? {

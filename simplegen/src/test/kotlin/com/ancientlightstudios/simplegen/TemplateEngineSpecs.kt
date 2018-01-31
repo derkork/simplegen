@@ -65,4 +65,20 @@ class TemplateEngineSpecs : Spek({
             }
         }
     }
-}) 
+
+    given("i want to use a camelCased filter") {
+        val customFilter = ScriptFilter("function camelCase(input) {\n    return 'camel';\n}", "camelCase")
+        val data = mapOf("someString" to "12345")
+        val engine = TemplateEngine(getResourcesRootFileResolver(), TemplateEngineArguments(additionalFilters = listOf(customFilter)))
+
+        val template="{{ someString | camelCase }}"
+
+        on("executing the template")             {
+            val result = engine.execute(template, data)
+
+            it("yields the proper output") {
+                assertEquals("camel", result)
+            }
+        }
+    }
+})

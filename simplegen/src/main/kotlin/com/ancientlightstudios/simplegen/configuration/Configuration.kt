@@ -1,6 +1,6 @@
 package com.ancientlightstudios.simplegen.configuration
 
 class Configuration(
-        val transformations: List<Transformation> = emptyList<Transformation>(),
+        val transformations: List<Transformation> = emptyList(),
         val templateEngine: TemplateEngineConfiguration = TemplateEngineConfiguration(),
-        val customFilters: List<CustomFilterConfiguration> = emptyList<CustomFilterConfiguration>())
+        val customFilters: List<CustomFilterConfiguration> = emptyList())
