@@ -2,7 +2,6 @@ package com.ancientlightstudios.simplegen
 
 import com.ancientlightstudios.simplegen.filters.ScriptFilter
 import org.jetbrains.spek.api.Spek
-import java.lang.invoke.MethodHandles.catchException
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -14,7 +13,7 @@ class TemplateEngineSpecs : Spek({
         val template = "{{ value1 }}:{{ value2 }}"
         val engine = TemplateEngine(getResourcesRootFileResolver())
         on("executing the template inside the context") {
-            val result = engine.execute(TemplateEngineJob("plain text",  template).with(context))
+            val result = engine.execute(TemplateEngineJob("plain text", template).with(context))
 
             it("yields the proper output") {
                 assertEquals("5:10", result)
@@ -28,7 +27,7 @@ class TemplateEngineSpecs : Spek({
         val engine = TemplateEngine(getResourcesRootFileResolver())
 
         on("executing the template") {
-            val result = engine.execute(TemplateEngineJob("plain text" ,template))
+            val result = engine.execute(TemplateEngineJob("plain text", template))
 
             it("yields the proper result") {
                 assertEquals("someValue", result)
@@ -68,9 +67,9 @@ class TemplateEngineSpecs : Spek({
         }
     }
 
-    given ("i have a template with a syntax error") {
-        val  template = "{% if foo %}" // missing endif
-         val engine = TemplateEngine(getResourcesRootFileResolver())
+    given("i have a template with a syntax error") {
+        val template = "{% if foo %}" // missing endif
+        val engine = TemplateEngine(getResourcesRootFileResolver())
 
         on("executing the template") {
             val exception = catchException {
@@ -82,21 +81,21 @@ class TemplateEngineSpecs : Spek({
                 val templateErrorException = exception as TemplateErrorException
                 assertEquals("plain text", templateErrorException.job.source)
                 assertEquals(1, templateErrorException.result.errors.size)
-                assertEquals( 1, templateErrorException.result.errors[0].lineno)
+                assertEquals(1, templateErrorException.result.errors[0].lineno)
                 assertContains(templateErrorException.result.errors[0].message, "Missing end")
             }
         }
     }
 
     given("i want to use a camelCased filter") {
-        val customFilter = ScriptFilter("function camelCase(input) {\n    return 'camel';\n}", "camelCase")
+        val customFilter = ScriptFilter("plain text", "function camelCase(input) {\n    return 'camel';\n}", "camelCase")
         val data = mapOf("someString" to "12345")
         val engine = TemplateEngine(getResourcesRootFileResolver(), TemplateEngineArguments(additionalFilters = listOf(customFilter)))
 
-        val template="{{ someString | camelCase }}"
+        val template = "{{ someString | camelCase }}"
 
-        on("executing the template")             {
-            val result = engine.execute(template, data)
+        on("executing the template") {
+            val result = engine.execute(TemplateEngineJob( "plain text", template).with(data))
 
             it("yields the proper output") {
                 assertEquals("camel", result)
