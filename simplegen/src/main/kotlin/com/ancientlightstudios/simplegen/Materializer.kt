@@ -10,9 +10,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 
-class Materializer(val fileResolver: FileResolver) {
+class Materializer(private val fileResolver: FileResolver) {
 
-    val log: Logger = LoggerFactory.getLogger(Materializer::class.java)
+    private val log: Logger = LoggerFactory.getLogger(Materializer::class.java)
 
     fun materialize(source: Configuration): List<MaterializedTransformation> = source.transformations.flatMap { materialize(source, it) }
 
@@ -39,9 +39,9 @@ class Materializer(val fileResolver: FileResolver) {
                 .toTypedArray()
 
         val data: Map<String, Any>
-        if (dataMaps.isEmpty()) {
+        data = if (dataMaps.isEmpty()) {
             log.warn("Your input files didn't yield any data. Please check if the file names are correct.")
-            data = emptyMap()
+            emptyMap()
         } else {
             if (log.isDebugEnabled) {
                 log.debug("Merging data from ${dataMaps.size} source files.")
@@ -49,7 +49,7 @@ class Materializer(val fileResolver: FileResolver) {
                     log.debug("Source: $dataMap")
                 }
             }
-            data = JsonUtil.merge(*dataMaps)
+            JsonUtil.merge(*dataMaps)
         }
 
         if (log.isDebugEnabled) {
@@ -71,11 +71,7 @@ class Materializer(val fileResolver: FileResolver) {
             val templateSource = templateEngine.execute(TemplateEngineJob( "config.yml -> transformations -> template", source.template).with(data, node))
             val templateText =  fileResolver.resolve(templateSource).readText()
 
-
-            var engineConfiguration = source.templateEngine
-            if (engineConfiguration == null) {
-                engineConfiguration = configuration.templateEngine
-            }
+            val engineConfiguration = source.templateEngine ?: configuration.templateEngine
             result.add(MaterializedTransformation(templateSource, templateText, data, node, outputFile, engineConfiguration))
         }
         return result
