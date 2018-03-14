@@ -37,7 +37,8 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.spek</groupId>
-            <artifactId>spek</artifactId>
+            <artifactId>spek-api</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

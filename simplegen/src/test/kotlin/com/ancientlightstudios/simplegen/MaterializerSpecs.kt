@@ -3,6 +3,9 @@ package com.ancientlightstudios.simplegen
 import com.ancientlightstudios.simplegen.configuration.Configuration
 import com.ancientlightstudios.simplegen.resources.SimpleFileResolver
 import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.given
+import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.on
 import kotlin.test.assertEquals
 
 class MaterializerSpecs : Spek({

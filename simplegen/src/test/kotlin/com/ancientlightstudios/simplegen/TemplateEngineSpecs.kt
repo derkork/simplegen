@@ -2,6 +2,9 @@ package com.ancientlightstudios.simplegen
 
 import com.ancientlightstudios.simplegen.filters.ScriptFilter
 import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.given
+import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.on
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
