@@ -6,10 +6,11 @@ import com.ancientlightstudios.simplegen.resources.FileUtil
 import com.ancientlightstudios.simplegen.resources.SimpleFileResolver
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.File
 
 
-class Runner(val basePath: String = ".", val configPath: String = "config.yml", private val outputFolder: String = ".") {
+class Runner(private val basePath: String = ".",
+             private val configPath: String = "config.yml",
+             private val outputFolder: String = ".") {
 
     private val log: Logger = LoggerFactory.getLogger(Runner::class.java)
 
@@ -17,9 +18,9 @@ class Runner(val basePath: String = ".", val configPath: String = "config.yml", 
         val fileResolver = SimpleFileResolver(basePath)
 
         log.info("Reading configuration...")
-        val configFile: File
-        try {
-            configFile = FileUtil.resolve(basePath, configPath)
+
+        val configFile = try {
+            FileUtil.resolve(basePath, configPath)
         } catch(e: FileNotResolvedException) {
             log.error("No configuration file config.yml present.")
             return false

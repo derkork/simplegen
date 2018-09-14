@@ -7,13 +7,13 @@ import com.hubspot.jinjava.loader.ResourceNotFoundException
 import java.io.File
 import java.nio.charset.Charset
 
-class RepositoryFileLocator(val fileResolver: FileResolver) : ResourceLocator {
+class RepositoryFileLocator(private val fileResolver: FileResolver) : ResourceLocator {
     override fun getString(fullName: String, encoding: Charset, interpreter: JinjavaInterpreter?): String {
         val resolve: File
         try {
             resolve = fileResolver.resolve(fullName)
         } catch(e: Exception) {
-            throw ResourceNotFoundException("Couldn't find resource: " + fullName)
+            throw ResourceNotFoundException("Couldn't find resource: $fullName")
         }
         return resolve.readText(encoding)
     }
