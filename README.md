@@ -289,7 +289,20 @@ function times(input, interpreter, arguments) {
 The three arguments of the function are:
 * `input` - the object to filter
 * `interpreter` - an instance of `com.hubspot.jinjava.interpret.JinjavaInterpreter`.
-* `arguments` - the arguments given to the filter in the template (an array of objects)
+* `arguments` - the arguments given to the filter in the template (an array of strings)
+
+You can access the template context in your custom filter. This is useful, if you would like to get access to some data
+in the `data` or `node` variables.
+
+```javascript
+// a simple filter which reads some value from the template context
+function times(input, interpreter, arguments) {
+    var data = interpreter.context['data'];
+    var node = interpreter.context['node'];
+
+    // now do something useful with it.
+}
+```
 
 To register your custom filter, add the following to your `config.yml`:
 

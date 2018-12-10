@@ -1,7 +1,6 @@
 package com.ancientlightstudios.simplegen.filters
 
-import com.ancientlightstudios.simplegen.assertContains
-import com.ancientlightstudios.simplegen.catchException
+import com.ancientlightstudios.simplegen.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -59,6 +58,22 @@ class ScriptFilterSpecs : Spek({
                 assertEquals("plain text", scriptException.fileName)
                 assertContains(scriptException.message, "null")
                 assertEquals(scriptException.lineNumber, 1)
+            }
+        }
+    }
+
+    given( "I have a script which wants to access the template context") {
+        val template = "{{ data | getNode }}"
+
+        val script = "function getNode(input, interpreter) { return interpreter.context['node'] }"
+        val filter = ScriptFilter("plain text", script, "getNode")
+
+        val engine = TemplateEngine(getResourcesRootFileResolver(), TemplateEngineArguments(additionalFilters = listOf(filter)))
+        val result = engine.execute(TemplateEngineJob("plain text", template).with("someData", "someNode"))
+
+        on ("invoking the script filter through the template engine") {
+            it ("has properly gotten the node information from the context") {
+                assertEquals("someNode", result)
             }
         }
     }
