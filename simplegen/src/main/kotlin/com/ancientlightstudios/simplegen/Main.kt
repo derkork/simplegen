@@ -6,18 +6,21 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object CommandLineArgs {
-    @Parameter(names=arrayOf("--sourceDirectory", "-s"), description = "Directory which contains the config.yml file.")
+    @Parameter(names= ["--sourceDirectory", "-s"], description = "Directory which contains the config.yml file.")
     var sourceDirectory:String = "."
-    @Parameter(names=arrayOf("--outputDirectory", "-o"), description = "Directory where the generated files should be placed.")
+    @Parameter(names= ["--outputDirectory", "-o"], description = "Directory where the generated files should be placed.")
     var outputDirectory:String = "."
-    @Parameter(names= arrayOf("--configFileName", "-c"), description = "Name of the configuration file to use.")
+    @Parameter(names= ["--configFileName", "-c"], description = "Name of the configuration file to use.")
     var configFileName = "config.yml"
-    @Parameter(names =arrayOf("--help"), help = true, description = "Shows this help information and exits.")
+    @Parameter(names = ["--help"], help = true, description = "Shows this help information and exits.")
     var help: Boolean = false
-    @Parameter(names =arrayOf("--version"), description = "Shows the version and exits.")
+    @Parameter(names = ["--version"], description = "Shows the version and exits.")
     var version:Boolean = false
-    @Parameter(names =arrayOf("--verbose"), description = "Show more verbose output.")
+    @Parameter(names = ["--verbose"], description = "Show more verbose output.")
     var verbose:Boolean = false
+    @Parameter(names = ["--force", "-f"], description = "Force re-generation of output even if sources have not changed.")
+    var force:Boolean = false
+
 
 }
 
@@ -41,7 +44,7 @@ fun main(args: Array<String>) {
         System.exit(0)
     }
 
-    if (!Runner(CommandLineArgs.sourceDirectory,CommandLineArgs.configFileName, CommandLineArgs.outputDirectory).run()) {
+    if (!Runner(CommandLineArgs.sourceDirectory,CommandLineArgs.configFileName, CommandLineArgs.outputDirectory, CommandLineArgs.force).run()) {
         log.info("There were errors when running.")
         System.exit(1)
     }

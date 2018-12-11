@@ -10,19 +10,27 @@ import org.slf4j.LoggerFactory
 
 class Runner(private val basePath: String = ".",
              private val configPath: String = "config.yml",
-             private val outputFolder: String = ".") {
+             private val outputFolder: String = ".",
+             private val forceUpdate: Boolean = false) {
 
     private val log: Logger = LoggerFactory.getLogger(Runner::class.java)
 
     fun run(): Boolean {
+        val startTime = System.currentTimeMillis()
+
         val fileResolver = SimpleFileResolver(basePath)
 
         log.info("Reading configuration...")
 
         val configFile = try {
             FileUtil.resolve(basePath, configPath)
-        } catch(e: FileNotResolvedException) {
-            log.error("No configuration file config.yml present.")
+        } catch (e: FileNotResolvedException) {
+            log.error("No configuration file $configPath present in $basePath.")
+            return false
+        }
+
+        if (!configFile.exists()) {
+            log.error("No configuration file $configPath present in $basePath.")
             return false
         }
 
@@ -37,29 +45,53 @@ class Runner(private val basePath: String = ".",
             val materializedTransformations = materializer.materialize(config)
             val filters = config.customFilters.map { FilterBuilder.buildFilter(it, fileResolver) }
 
+            val globalFiltersLastModified = filters.lastModified()
+            val globalFilters = filters.objects()
+
             log.info("Processing ${materializedTransformations.size} transformations...")
 
-            for ((templateSource, template, data, node, outputPath, engineConfiguration) in materializedTransformations) {
-                log.debug("Rendering $templateSource into $outputPath.")
-                val outputFile = FileUtil.resolve(outputFolder, outputPath)
+            var rendered = 0
+            var upToDate = 0
+
+            for ((item, lastModified) in materializedTransformations) {
+                val outputFile = FileUtil.resolve(outputFolder, item.outputPath)
+
+                if (!forceUpdate) {
+                    val outputLastModified = outputFile.lastModified()
+                    if (outputFile.exists() &&
+                            outputLastModified >= lastModified &&
+                            outputLastModified >= globalFiltersLastModified) {
+                        upToDate++
+                        log.debug("Output file ${item.outputPath} is up-to-date not rendering it again.")
+                        continue
+                    }
+                }
+
+                rendered++
+
+                log.debug("Rendering ${item.templateSource} into ${item.outputPath}.")
                 val parent = outputFile.parentFile
                 if (!parent.exists()) {
                     parent.mkdirs()
                 }
 
-                val engineArguments = TemplateEngineArguments(engineConfiguration, filters)
+                val engineArguments = TemplateEngineArguments(item.templateEngineConfiguration, globalFilters)
                 val templateEngine = TemplateEngine(fileResolver, engineArguments)
 
-                val result = templateEngine.execute(TemplateEngineJob(templateSource, template).with(data, node))
+                val result = templateEngine.execute(TemplateEngineJob(item.templateSource, item.template).with(item.data, item.node))
                 outputFile.writeText(result)
             }
-            log.info("Generation complete.")
+
+            val endTime = System.currentTimeMillis()
+            val totalTime = endTime - startTime
+            log.info("Generation complete ($rendered rendered/$upToDate up-to-date) in ${totalTime}ms.")
             return true
-        } catch(e: TemplateErrorException) {
+
+        } catch (e: TemplateErrorException) {
             handle(e)
-        } catch(e: YamlErrorException) {
+        } catch (e: YamlErrorException) {
             handle(e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             handle(e)
         }
         return false
@@ -72,7 +104,7 @@ class Runner(private val basePath: String = ".",
         }
     }
 
-    private fun handle(e:YamlErrorException) {
+    private fun handle(e: YamlErrorException) {
         log.error("ERROR when parsing YAML file: '${e.source}'")
         log.error(" ${e.message}")
     }

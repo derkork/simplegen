@@ -24,7 +24,7 @@ object JsonUtil {
 
         val nodes = maps.map { mapper.convertValue(it, JsonNode::class.java) }
 
-        for (node in nodes.slice(1..nodes.size - 1)) {
+        for (node in nodes.slice(1 until nodes.size)) {
             merge(nodes[0], node)
         }
 
@@ -45,7 +45,7 @@ object JsonUtil {
             if (valueToBeUpdated != null && updatedValue.isArray) {
                 // running a loop for all elements of the updated ArrayNode
                 @Suppress("LoopToCallChain")
-                for (i in 0..updatedValue.size() - 1) {
+                for (i in 0 until updatedValue.size()) {
                     val updatedChildNode = updatedValue.get(i)
                     // Create a new Node in the node that should be updated, if there was no corresponding node in it
                     // Use-case - where the updateNode will have a new element in its Array

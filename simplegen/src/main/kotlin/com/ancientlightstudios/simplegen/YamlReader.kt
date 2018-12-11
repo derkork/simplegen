@@ -1,7 +1,6 @@
 package com.ancientlightstudios.simplegen
 
 import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import java.io.InputStream
@@ -19,9 +18,8 @@ object YamlReader {
         try {
             return ObjectMapper(YAMLFactory()).readValue(stream, typeRef)
         }
-        catch(e:JsonMappingException) {
+        catch(e: Exception) {
             handle(source, e)
-            throw RuntimeException() // should never happen
         }
     }
 
@@ -36,13 +34,12 @@ object YamlReader {
         try {
             return ObjectMapper(YAMLFactory()).readValue(stream, type)
         }
-        catch(e:JsonMappingException) {
+        catch(e:Exception) {
             handle(source, e)
-            throw RuntimeException() // should never happen
         }
     }
 
-    private fun handle(source:String,  e: JsonMappingException) {
+    private fun handle(source:String,  e: Exception) : Nothing {
         throw YamlErrorException(source, e.message)
     }
 

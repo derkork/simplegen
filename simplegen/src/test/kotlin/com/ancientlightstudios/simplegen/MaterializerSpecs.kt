@@ -22,7 +22,7 @@ class MaterializerSpecs : Spek({
             }
 
             it("yields merged data") {
-                assertEquals("is foo", (result[0].data["root"] as Map<*, *>)["foo"])
+                assertEquals("is foo", (result[0].item.data["root"] as Map<*, *>)["foo"])
             }
 
         }

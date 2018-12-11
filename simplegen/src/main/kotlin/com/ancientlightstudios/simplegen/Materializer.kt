@@ -14,12 +14,13 @@ class Materializer(private val fileResolver: FileResolver) {
 
     private val log: Logger = LoggerFactory.getLogger(Materializer::class.java)
 
-    fun materialize(source: Configuration): List<MaterializedTransformation> = source.transformations.flatMap { materialize(source, it) }
+    fun materialize(source: Configuration): List<DependencyObject<MaterializedTransformation>> = source.transformations.flatMap { materialize(source, it) }
 
-    private fun materialize(configuration: Configuration, source: Transformation): List<MaterializedTransformation> {
+    private fun materialize(configuration: Configuration, source: Transformation): List<DependencyObject<MaterializedTransformation>> {
 
         val filters = configuration.customFilters.map { FilterBuilder.buildFilter(it, fileResolver) }
-        val templateEngineArguments = TemplateEngineArguments(TemplateEngineConfiguration(), filters)
+        val filtersLastModified = filters.lastModified()
+        val templateEngineArguments = TemplateEngineArguments(TemplateEngineConfiguration(), filters.map { it.item })
         val templateEngine = TemplateEngine(fileResolver, templateEngineArguments)
 
         log.debug("Reading data from source files.")
@@ -27,29 +28,26 @@ class Materializer(private val fileResolver: FileResolver) {
         val dataMaps = source.getParsedData()
                 .flatMap {
                     // we template all input now.
-                    val baseDir = templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> data -> basePath",  it.basePath))
-                    val includes = it.includes.map { templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> data -> includes",it)) }
-                    val excludes = it.excludes.map { templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> data -> excludes", it)) }
+                    val baseDir = templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> data -> basePath", it.basePath))
+                    val includes = it.includes.map { file -> templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> data -> includes", file)) }
+                    val excludes = it.excludes.map { file -> templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> data -> excludes", file)) }
 
                     val baseDirAsFile = fileResolver.resolve(baseDir)
                     val customResolver = SimpleFileResolver(baseDirAsFile.canonicalPath)
                     customResolver.resolve(includes, excludes)
                 }
-                .map { val file = it; file.inputStream().use { YamlReader.readToMap(file.path, it) } }
-                .toTypedArray()
+                .map { val file = it; DependencyObject(file.inputStream().use { stream -> YamlReader.readToMap(file.path, stream) }, file.lastModified()) }
+                .toList()
 
-        val data: Map<String, Any>
-        data = if (dataMaps.isEmpty()) {
+        val dataLastModified: Long = dataMaps.lastModified()
+        val data: Map<String, Any> = if (dataMaps.isEmpty()) {
             log.warn("Your input files didn't yield any data. Please check if the file names are correct.")
             emptyMap()
         } else {
             if (log.isDebugEnabled) {
                 log.debug("Merging data from ${dataMaps.size} source files.")
-                for (dataMap in dataMaps) {
-                    log.debug("Source: $dataMap")
-                }
             }
-            JsonUtil.merge(*dataMaps)
+            JsonUtil.merge(*dataMaps.objects().toTypedArray())
         }
 
         if (log.isDebugEnabled) {
@@ -62,17 +60,24 @@ class Materializer(private val fileResolver: FileResolver) {
             nodes = listOf<Any>(nodes)
         }
 
-        val result = mutableListOf<MaterializedTransformation>()
+        val result = mutableListOf<DependencyObject<MaterializedTransformation>>()
         for (node in nodes as Iterable<*>) {
 
             node ?: throw IllegalStateException("Unexpected null node.")
 
-            val outputFile = templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> outputPath", source.outputPath).with( data, node))
-            val templateSource = templateEngine.execute(TemplateEngineJob( "config.yml -> transformations -> template", source.template).with(data, node))
-            val templateText =  fileResolver.resolve(templateSource).readText()
+            val outputFile = templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> outputPath", source.outputPath).with(data, node))
+            val templateSource = templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> template", source.template).with(data, node))
+            val templateFile = fileResolver.resolve(templateSource)
+            val templateText = templateFile.readText()
+            val lastModified = Math.max(filtersLastModified, Math.max(templateFile.lastModified(), dataLastModified))
 
             val engineConfiguration = source.templateEngine ?: configuration.templateEngine
-            result.add(MaterializedTransformation(templateSource, templateText, data, node, outputFile, engineConfiguration))
+            result.add(
+                    DependencyObject(
+                            MaterializedTransformation(templateSource, templateText, data, node, outputFile, engineConfiguration),
+                            lastModified
+                    )
+            )
         }
         return result
     }

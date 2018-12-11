@@ -32,7 +32,7 @@ object FileUtil {
         val files = scanner.includedFiles.map { File(basePath, it) }
 
         if (log.isDebugEnabled) {
-            log.debug("Resolved files: ${files.map { it.path }.joinToString(",") }")
+            log.debug("Resolved files: ${files.joinToString(",") { it.path }}")
         }
 
         return files
