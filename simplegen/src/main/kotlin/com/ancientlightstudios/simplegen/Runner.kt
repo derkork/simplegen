@@ -86,7 +86,8 @@ class Runner(private val basePath: String = ".",
             val totalTime = endTime - startTime
             log.info("Generation complete ($rendered rendered/$upToDate up-to-date) in ${totalTime}ms.")
             return true
-
+        } catch(e:FileNotResolvedException) {
+            handle(e)
         } catch (e: TemplateErrorException) {
             handle(e)
         } catch (e: YamlErrorException) {
@@ -98,19 +99,23 @@ class Runner(private val basePath: String = ".",
     }
 
     private fun handle(e: TemplateErrorException) {
-        log.error("ERROR when rendering template: '${e.job.source}'")
+        log.error("When rendering template: '${e.job.source}'")
         e.result.errors.forEach {
             log.error(" @ line: ${it.lineno} - ${it.message} ")
         }
     }
 
     private fun handle(e: YamlErrorException) {
-        log.error("ERROR when parsing YAML file: '${e.source}'")
+        log.error("When parsing YAML file: '${e.source}'")
         log.error(" ${e.message}")
     }
 
+    private fun handle(e: FileNotResolvedException) {
+        log.error("The file ${e.message} referenced in your configuration cannot be found.")
+    }
+
     private fun handle(e: Exception) {
-        log.error("ERROR unexpected exception: ${e.message} ", e)
+        log.error("Unexpected exception: ${e.message} ", e)
     }
 
 }
