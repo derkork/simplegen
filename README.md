@@ -322,7 +322,14 @@ customFilters:
    # Name of the filter function. This is also the name that will be used for the filter inside the template engine.
    function: times
 
-  # more custom filters..
+ - script: filters/moreFilters.js
+   function:
+    # Starting with SimpleGen 1.0.8 you can also easily reference more than one
+    # function in the same file.
+    - myOtherFilter
+    - yetAnotherFilter
+
+ # more custom filters..
 
 ```
   

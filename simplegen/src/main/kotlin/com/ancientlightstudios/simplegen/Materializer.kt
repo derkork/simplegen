@@ -18,14 +18,14 @@ class Materializer(private val fileResolver: FileResolver) {
 
     private fun materialize(configuration: Configuration, source: Transformation): List<DependencyObject<MaterializedTransformation>> {
 
-        val filters = configuration.customFilters.map { FilterBuilder.buildFilter(it, fileResolver) }
+        val filters = configuration.customFilters.flatMap { FilterBuilder.buildFilter(it, fileResolver) }
         val filtersLastModified = filters.lastModified()
         val templateEngineArguments = TemplateEngineArguments(TemplateEngineConfiguration(), filters.map { it.item })
         val templateEngine = TemplateEngine(fileResolver, templateEngineArguments)
 
         log.debug("Reading data from source files.")
 
-        val dataMaps = source.getParsedData()
+        val dataMaps = source.parsedData
                 .flatMap {
                     // we template all input now.
                     val baseDir = templateEngine.execute(TemplateEngineJob("config.yml -> transformations -> data -> basePath", it.basePath))

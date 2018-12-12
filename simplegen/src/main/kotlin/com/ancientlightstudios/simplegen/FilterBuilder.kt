@@ -7,20 +7,21 @@ import com.hubspot.jinjava.lib.filter.Filter
 
 object FilterBuilder {
 
-    fun buildFilter(customFilterConfiguration: CustomFilterConfiguration, fileResolver: FileResolver) : DependencyObject<Filter> {
+    fun buildFilter(customFilterConfiguration: CustomFilterConfiguration, fileResolver: FileResolver) : List<DependencyObject<Filter>> {
         val file = fileResolver.resolve(customFilterConfiguration.script)
         val lastModified = file.lastModified()
         val script = file.readText()
-        val function = customFilterConfiguration.function
+        val functions = customFilterConfiguration.parsedFunctions
 
         if (script.isBlank()) {
             throw IllegalArgumentException("The filter script is blank.")
         }
 
-        if (function.isBlank()) {
-           throw IllegalArgumentException("The filter's function name cannot be empty.")
+        return functions.map { function ->
+            if (function.isBlank()) {
+                throw IllegalArgumentException("The filter's function name cannot be empty.")
+            }
+            DependencyObject<Filter>(ScriptFilter(customFilterConfiguration.script, script, function), lastModified)
         }
-
-        return DependencyObject(ScriptFilter(customFilterConfiguration.script, script, function), lastModified)
     }
 }

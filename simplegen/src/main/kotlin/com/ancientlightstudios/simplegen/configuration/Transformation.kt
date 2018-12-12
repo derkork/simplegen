@@ -6,51 +6,27 @@ class Transformation(val template: String = "",
                      val outputPath: String = "",
                      val templateEngine: TemplateEngineConfiguration? = null) {
 
-    private var parsedData: List<DataSpec>? = null
+    val parsedData: List<DataSpec> by lazy { parseData() }
 
-    fun getParsedData(): List<DataSpec> {
-        synchronized(this) {
-            if (parsedData != null) {
-                return parsedData as List<DataSpec>
+    private fun parseData(): List<DataSpec> {
+        val list = mutableListOf<DataSpec>()
+
+        val input = data as? List<*> ?: listOf(data)
+
+        for (item in input) {
+            if (item is String) {
+                list.add(DataSpec("", listOf(item), listOf()))
             }
 
+            if (item is Map<*, *>) {
+                val baseDir = item["basePath"] as String?
+                val includes = item["includes"].asStringList()
+                val excludes = item["excludes"].asStringList()
 
-            val list = mutableListOf<DataSpec>()
-
-            val input = data as? List<*> ?: listOf(data)
-
-            for (item in input) {
-                if (item is String) {
-                    list.add(DataSpec("", listOf(item), listOf()))
-                }
-
-                if (item is Map<*, *>) {
-                    val baseDir = item["basePath"] as String?
-                    val includes = asList(item["includes"])
-                    val excludes = asList(item["excludes"])
-
-                    list.add(DataSpec(baseDir ?: "", includes, excludes))
-                }
+                list.add(DataSpec(baseDir ?: "", includes, excludes))
             }
-
-            parsedData = list
-            return parsedData as List<DataSpec>
         }
-
-    }
-
-    private fun asList(any: Any?): List<String> {
-        if (any is String) {
-            return listOf(any)
-        }
-        if (any is List<*>) {
-            @Suppress("UNCHECKED_CAST")
-            return any as List<String>
-        }
-        if (any != null) {
-            return listOf(any.toString())
-        }
-        return emptyList()
+        return list
     }
 
     class DataSpec(val basePath: String, val includes: List<String>, val excludes: List<String>)

@@ -36,7 +36,7 @@ class ConfigurationSpecs : Spek({
         }
 
         on("getting the data files") {
-            val data = configuration.transformations[0].getParsedData()
+            val data = configuration.transformations[0].parsedData
 
             it("yields a result for the simple case") {
                 assert(data.isNotEmpty())
@@ -64,7 +64,7 @@ class ConfigurationSpecs : Spek({
         }
 
         on("getting another data file") {
-            val data = configuration.transformations[1].getParsedData()
+            val data = configuration.transformations[1].parsedData
 
             it("supports specifying data directly at the node without a list") {
                 assertEquals(1, data.size)

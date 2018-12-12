@@ -44,7 +44,7 @@ class Runner(private val basePath: String = ".",
 
             val materializer = Materializer(fileResolver)
             val materializedTransformations = materializer.materialize(config)
-            val filters = config.customFilters.map { FilterBuilder.buildFilter(it, fileResolver) }
+            val filters = config.customFilters.flatMap { FilterBuilder.buildFilter(it, fileResolver) }
 
 
             log.info("Processing ${materializedTransformations.size} transformations...")
