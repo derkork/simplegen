@@ -35,8 +35,8 @@ SimpleGen takes data in YAML format and runs this data through a Jinja2 template
 
 ## Requirements
 
-* Java 8
-* Maven 3 if you'd like to use the maven plugin. 
+* Java 8 or later
+* _Optional_: Maven 3 if you'd like to use the maven plugin.
 
 ## Usage
 
@@ -86,6 +86,15 @@ Simply add the Maven plugin to your build plugins:
 
 The plugin expects the configuration files to reside in `src/main/simplegen` and will write its output to 
 `target/generated-sources/simplegen`.
+
+#### Incremental generation
+
+Starting with SimpleGen 1.0.8 sources are generated incrementally. This means that the generated files
+are only recreated when the input for them (e.g. templates, data, scripts) has changed. This avoids
+unnecessary re-compilation of generated code when the generated code hasn't actually changed.
+
+If you want to re-generate all code no matter whether or not the input has changed, use the `--force`
+command line option or the `<forceUpdate>true</forceUpdate>` Maven setting.
 
 ### Data
 

@@ -38,9 +38,15 @@ class SimplegenMojo : AbstractMojo() {
     @Parameter(defaultValue = "config.yml")
     private lateinit var configFileName: String
 
+    /**
+     * Should an update of the generated sources be forced.
+     */
+    @Parameter(defaultValue = "false")
+    private var forceUpdate:Boolean = false
+
     override fun execute() {
         log.info("Generating sources from ${File(sourceDirectory, configFileName).path} to ${outputDirectory.path}")
-        if (!Runner(sourceDirectory.path, configFileName, outputDirectory.path).run()) {
+        if (!Runner(sourceDirectory.path, configFileName, outputDirectory.path, forceUpdate).run()) {
             throw MojoFailureException("There were errors running SimpleGen.")
         }
         project.addCompileSourceRoot(outputDirectory.path)
