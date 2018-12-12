@@ -39,7 +39,7 @@
 
     <properties>
         <kotlin.version>1.2.30</kotlin.version>
-        <dokka.version>0.9.9</dokka.version>
+        <dokka.version>0.9.17</dokka.version>
         <jackson.version>2.9.7</jackson.version>
         <spek.version>1.1.5</spek.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
