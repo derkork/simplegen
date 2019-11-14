@@ -19,7 +19,7 @@ class ScriptFilter(val source: String, script: String, val function: String) : F
     }
 
     override fun getName(): String {
-        return function.toLowerCase()
+        return function;
     }
 
     override fun filter(obj: Any?, interpreter: JinjavaInterpreter?, vararg args: String?): Any? {
