@@ -2,7 +2,7 @@ language: java
 install:
 - mvn -Pstandalone-app -DskipTests=true -Dmaven.javadoc.skip=true -B -V install
 jdk:
-- oraclejdk8
+- openjdk8
 deploy:
   provider: releases
   skip_cleanup: true
