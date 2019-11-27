@@ -41,6 +41,7 @@
         <kotlin.version>1.2.30</kotlin.version>
         <dokka.version>0.9.17</dokka.version>
         <jackson.version>2.10.1</jackson.version>
+        <graalvm.version>19.2.0</graalvm.version>
         <spek.version>1.1.5</spek.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -52,6 +53,16 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.graalvm.js</groupId>
+                <artifactId>js-scriptengine</artifactId>
+                <version>${graalvm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.graalvm.js</groupId>
+                <artifactId>js</artifactId>
+                <version>${graalvm.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.ancientlightstudios</groupId>
                 <artifactId>simplegen</artifactId>

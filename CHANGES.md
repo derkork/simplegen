@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+* **Breaking Change**: SimpleGen now uses GraalVM instead of Nashorn for evaluating custom script filters. For most filters this should be a drop-in-replacement however some filters may not work anymore. See the [Nashorn Migration Guide](https://github.com/graalvm/graaljs/blob/master/docs/user/NashornMigrationGuide.md) for details. Nashorn compatibility mode is enabled.
+* **Breaking Change**: The second argument for script filters is no longer an instance of `com.hubspot.jinjava.interpret.JinjavaInterpreter` but rather a function which allows you to resolve template variables: 
+    ```javascript
+    // old
+    function myFilter(input, interpreter, args) {
+        var templateVariable = interpreter.context['variableName'];
+    }
+    
+    // new
+    function myFilter(input, resolve, args) {
+        var templateVariable = resolve('variableName');
+    }
+    ```
 ### Security
 * Update `jackson` libraries to mitigate various CVEs.
 * Update `jinjava` library to mitigate CVE-2018-18893.

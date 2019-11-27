@@ -5,17 +5,18 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.ancientlightstudios</groupId>
+    <artifactId>simplegen-maven-example</artifactId>
+    <version>2.0.0</version>
+    <packaging>jar</packaging>
     <name>SimpleGen - Example Application</name>
     <description>SimpleGen is a simple code generator. This is an example application that shows how to use SimpleGen.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <simplegen-version>2.0.0</simplegen-version>
     </properties>
 
-    <groupId>com.ancientlightstudios</groupId>
-    <artifactId>simplegen-maven-example</artifactId>
-    <version>2.0.0</version>
-    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -39,7 +40,7 @@
             <plugin>
                 <groupId>com.ancientlightstudios</groupId>
                 <artifactId>simplegen-maven-plugin</artifactId>
-                <version>1.0.8</version>
+                <version>${simplegen-version}</version>
                 <!--
                 Note that this configuration uses the default values. It is just added
                 to show what can be configured and how. If you want to run with the default

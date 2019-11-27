@@ -19,6 +19,14 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js-scriptengine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.beust</groupId>
             <artifactId>jcommander</artifactId>
             <version>1.48</version>
