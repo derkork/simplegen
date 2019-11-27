@@ -96,9 +96,18 @@ class ScriptFilterSpecs : Spek({
                 assertEquals("AkDoonFy-t_Yv6OagRj5xxuQ6JxgkkFOyVMYcwRYL3GQdxCLcboE2BHlaHQVkNVqKE55k2fvxTgLrNolWPeSQjQ", result)
             }
         }
+    }
 
+    given ("I have a script which wants to log debug") {
+        val filter = ScriptFilter("plainText", "function debug(value){console.log(value);}", "debug")
+        val engine = TemplateEngine(getResourcesRootFileResolver(), TemplateEngineArguments(additionalFilters = listOf(filter)))
 
-
+        on("invoking the script filter") {
+            val result = engine.execute(TemplateEngineJob("plain text", "{{ 'narf' | debug }}"))
+            it ("throws no exception" ) {
+                // i cannot really check the logging side effect here.
+            }
+        }
 
     }
 })
