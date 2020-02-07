@@ -11,7 +11,7 @@ Then modify your settings.xml
      <server>
       <id>ossrh</id>
       <username><!— Sonatype Issue tracker Username —></username>
-      <password><!— Sonatype Issue tracker Password —>/password>
+      <password><!— Sonatype Issue tracker Password —></password>
     </server>
   </servers>
   <profiles>

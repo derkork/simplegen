@@ -1,6 +1,8 @@
 # SimpleGen -  A simple yet powerful general-purpose code generator
 
-[![Build Status](https://travis-ci.org/derkork/simplegen.svg?branch=master)](https://travis-ci.org/derkork/simplegen)
+![Travis (.org)](https://img.shields.io/travis/derkork/simplegen)
+![Maven Central](https://img.shields.io/maven-central/v/com.ancientlightstudios/simplegen)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/derkork/simplegen)
 
 SimpleGen is a simple yet powerful general-purpose code generator. It is not specialized to any language,
 so whatever your target language is (may it be Java, Kotlin, C#, Ruby, JavaScript, HTML, CSS, etc.) - if it is text then 
@@ -47,11 +49,12 @@ The generator can be used standalone or as a Maven plugin. In both cases it expe
 * ``template.j2`` - at least one template
 
 ## Running through the command line
-To use the generator through the command line, [download the latest version](https://github.com/derkork/simplegen/releases/latest) 
-from GitHub. Then you can invoke the code generator by running:
+To use the generator through the command line, [download the latest version](https://github.com/derkork/simplegen/releases/latest) from GitHub. Then you can invoke the code generator by running:
 
 ```
-java -jar simplegen-<version>.jar --sourceDirectory <path to input structure> --outputDirectory <path for generated files>
+java -jar simplegen-<version>.jar \
+  --sourceDirectory <path to input structure> \
+  --outputDirectory <path for generated files>
 ```
 
 This will read the input structure from the input directory, generate the code and place the generated files in the
@@ -61,15 +64,18 @@ output directory.
 
 Simply add the Maven plugin to your build plugins:
 
-```xml 
+```xml
     <build>
         <plugins>
             ...
             <plugin>
                 <groupId>com.ancientlightstudios</groupId>
                 <artifactId>simplegen-maven-plugin</artifactId>
-                <version>1.0.8</version>
-                <executions>
+                <version><!-- 
+                     see badge at the top of the github 
+                     page for the current release version 
+            --></version>
+                <executions>        
                     <execution>
                         <id>generate</id>
                         <phase>generate-sources</phase>
@@ -89,7 +95,7 @@ The plugin expects the configuration files to reside in `src/main/simplegen` and
 
 #### Incremental generation
 
-Starting with SimpleGen 1.0.8 sources are generated incrementally. This means that the generated files
+Sources are generated incrementally. This means that the generated files
 are only recreated when the input for them (e.g. templates, data, scripts) has changed. This avoids
 unnecessary re-compilation of generated code when the generated code hasn't actually changed.
 
@@ -219,8 +225,17 @@ can be done globally or per transformation:
 ```yaml
 # This is the global configuration. 
 templateEngine:
+    # if true the first newline after a template tag is removed 
     trimBlocks: true
+
+    # if true tabs and spaces from the beginning of a line to the start of a 
+    # block are stripped. (Nothing will be stripped if there are other
+    # characters before the start of the block.)
     lstripBlocks: true
+
+    # if true, macros are allowed to recursively call themselves. Be sure you
+    # end the recursion at some point otherwise you may crash
+    # with a stack overflow or just hang in an endless loop.
     enableRecursiveMacroCalls: true
     
 transformations:
@@ -260,7 +275,7 @@ It is also possible to inject data through system properties using the `sp` filt
 
 ```
 
-Finally a thing that is often required when generating code is case-changing of identifiers, so this package adds a
+Finally a thing that is often required when generating code is case-changing of identifiers, so SimpleGen adds a
 custom filter for this as well. The syntax of this filter is:
 
 ```jinja2
@@ -290,14 +305,14 @@ so you can use all of it's functionality (including full access to the Java API)
 
 ```javascript
 // a simple filter which multiplies the input
-function times(input, interpreter, arguments) {
+function times(input, resolve, arguments) {
     return input * arguments[0];
 }
 ```
 
 The three arguments of the function are:
 * `input` - the object to filter
-* `interpreter` - an instance of `com.hubspot.jinjava.interpret.JinjavaInterpreter`.
+* `resolve` - a function that can be used to resolve template variables. See below for an example.
 * `arguments` - the arguments given to the filter in the template (an array of strings)
 
 You can access the template context in your custom filter. This is useful, if you would like to get access to some data
@@ -305,9 +320,9 @@ in the `data` or `node` variables.
 
 ```javascript
 // a simple filter which reads some value from the template context
-function times(input, interpreter, arguments) {
-    var data = interpreter.context['data'];
-    var node = interpreter.context['node'];
+function times(input, resolve, arguments) {
+    var data = resolve('data');
+    var node = resolve('node');
 
     // now do something useful with it.
 }
@@ -324,8 +339,7 @@ customFilters:
 
  - script: filters/moreFilters.js
    function:
-    # Starting with SimpleGen 1.0.8 you can also easily reference more than one
-    # function in the same file.
+    # You can also reference more than one function in the same file.
     - myOtherFilter
     - yetAnotherFilter
 
@@ -339,5 +353,5 @@ Then you can use your filter inside your templates like this:
 {{ 5 | times(2) }} {# prints 10 #}
 ```
    
-You can find a larger example in [simplegen-maven-example!](simplegen-maven-example/)
+You can find a larger example in [simplegen-maven-example!](simplegen-maven-example/).
 
