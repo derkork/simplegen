@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.0] - 2020-02-10
 ### Added
 * Due to the migration to GraalVM there is now a `console.log` command available inside the JavaScript filters which can be used to output debug information ([#19](https://github.com/derkork/simplegen/issues/19))
 ### Changed
