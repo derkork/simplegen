@@ -176,7 +176,7 @@ features that you can use inside of the templates.
 
 ### Configuration
 
-Now that we have data and a template, the last remaining step is to tell SimpleGen who to process these. You do this
+Now that we have data and a template, the last remaining step is to tell SimpleGen how to process these. You do this
 inside the `config.yml` file. Inside of that file you can define a series of transformations that SimpleGen should
 perform. Each transformation will read in YAML data from one or more files and then apply this data to a template
 for a subset of the nodes from the YAML data: 
@@ -300,7 +300,7 @@ Supported case formats are:
 #### Custom filters
 
 If you have specific needs for your project you can also write custom filters in JavaScript. A filter is simply a javascript 
-function that receives objects and works on them. The functions will be executed inside the Rhino scripting engine
+function that receives objects and works on them. The functions will be executed inside the GraalVM scripting engine
 so you can use all of it's functionality (including full access to the Java API) in your scripts. 
 
 ```javascript
