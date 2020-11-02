@@ -5,7 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+
 ### Changed
+* Updated the project to Kotlin 1.4
+* Replaced Spek testing framework with Kotest as Kotest seems to be a lot more mature. This also fixed that the tests were not running in then Maven build when using Spek.
+
+### Security
 * Update `ant` and `guava` dependencies to mitigate security issues.
 
 ## [2.0.0] - 2020-02-10

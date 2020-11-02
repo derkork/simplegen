@@ -34,6 +34,9 @@ class ScriptFilter(val source: String, script: String, private val function: Str
                 interpreter?.resolveELExpression(arguments[0].asString(), interpreter.lineNumber)
             }, args).`as`(Object::class.java)
         }
+        catch(e: PolyglotException) {
+            throw ScriptException(e.message, source, e.sourceLocation.startLine, e.sourceLocation.startColumn)
+        }
         catch(e: ScriptException) {
             if (e.cause is PolyglotException) {
                 val polyglotException = e.cause as PolyglotException

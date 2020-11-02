@@ -38,12 +38,13 @@
     </scm>
 
     <properties>
-        <kotlin.version>1.2.30</kotlin.version>
+        <kotlin.version>1.4.10</kotlin.version>
         <dokka.version>0.9.17</dokka.version>
         <jackson.version>2.10.1</jackson.version>
         <graalvm.version>19.2.0</graalvm.version>
-        <spek.version>1.1.5</spek.version>
+        <kotest.version>4.3.1</kotest.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
     </properties>
 
     <modules>
@@ -76,11 +77,6 @@
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-reflect</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-test</artifactId>
                 <version>${kotlin.version}</version>
             </dependency>
             <dependency>
@@ -144,17 +140,22 @@
                 <artifactId>guava</artifactId>
                 <version>24.1.1-jre</version>
             </dependency>
-
             <dependency>
-                <groupId>org.jetbrains.spek</groupId>
-                <artifactId>spek-api</artifactId>
-                <version>${spek.version}</version>
+                <groupId>io.kotest</groupId>
+                <artifactId>kotest-runner-junit5-jvm</artifactId>
+                <version>${kotest.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.jetbrains.spek</groupId>
-                <artifactId>spek-junit-platform-engine</artifactId>
-                <version>${spek.version}</version>
+                <groupId>io.kotest</groupId>
+                <artifactId>kotest-assertions-core-jvm</artifactId>
+                <version>${kotest.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.kotest</groupId>
+                <artifactId>kotest-property-jvm</artifactId>
+                <version>${kotest.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -164,6 +165,12 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>

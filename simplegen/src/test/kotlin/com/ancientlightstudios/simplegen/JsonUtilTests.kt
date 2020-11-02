@@ -1,13 +1,12 @@
 package com.ancientlightstudios.simplegen
 
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.api.dsl.on
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.maps.shouldContainKeys
 
-class JsonUtilSpecs : Spek({
+class JsonUtilTests : BehaviorSpec({
 
-    given("i have two simple maps") {
+    Given("i have two simple maps") {
 
         val node1 = mapOf(
                 "narf" to mapOf<String, Any>(
@@ -25,26 +24,24 @@ class JsonUtilSpecs : Spek({
                 )
         )
 
-        on("merging these maps") {
+        When("merging these maps") {
             val result = JsonUtil.merge(node1, node2)
 
-            it("it merges the top level objects correctly") {
-                assert(result.containsKey("narf"))
-                assert(result.containsKey("narf2"))
-                assert(result.containsKey("narf3"))
+            Then("it merges the top level objects correctly") {
+                result.shouldContainKeys("narf", "narf2", "narf3")
             }
 
-            it("it merges second level objects correctly") {
+            Then("it merges second level objects correctly") {
                 @Suppress("UNCHECKED_CAST")
-                assert((result["narf"] as Map<String, Any>).containsKey("narf2"))
+                (result["narf"] as Map<String, Any>).shouldContainKeys("narf2")
                 @Suppress("UNCHECKED_CAST")
-                assert((result["narf2"] as Map<String, Any>).containsKey("narf"))
+                (result["narf2"] as Map<String, Any>).shouldContainKeys("narf")
             }
         }
     }
 
 
-    given("i have some maps with nested lists") {
+    Given("i have some maps with nested lists") {
         val node1 = mapOf<String, Any>(
                 "narf" to listOf("lorem", "ipsum")
         )
@@ -52,15 +49,12 @@ class JsonUtilSpecs : Spek({
                 "narf" to listOf("dolor", "sit")
         )
 
-        on("merging those lists") {
+        When("merging those lists") {
             val result = JsonUtil.merge(node1, node2)
             val finalList = result["narf"] as List<*>
 
-            it("merges the lists") {
-                assert(finalList.contains("lorem"))
-                assert(finalList.contains("ipsum"))
-                assert(finalList.contains("dolor"))
-                assert(finalList.contains("sit"))
+            Then("merges the lists") {
+                finalList.shouldContainAll("lorem", "ipsum", "dolor", "sit")
             }
         }
     }
