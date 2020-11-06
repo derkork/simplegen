@@ -1,6 +1,6 @@
 transformations:
   - data:
-      - includes: data.yaml
+      - includes: data.toml
         mimeType: application/toml
     template: template.j2
     nodes: $
