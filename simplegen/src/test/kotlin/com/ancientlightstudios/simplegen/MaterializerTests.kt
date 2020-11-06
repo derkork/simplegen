@@ -1,6 +1,5 @@
 package com.ancientlightstudios.simplegen
 
-import com.ancientlightstudios.simplegen.configuration.Configuration
 import com.ancientlightstudios.simplegen.resources.SimpleFileResolver
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldHaveSize
@@ -9,7 +8,7 @@ import io.kotest.matchers.shouldBe
 class MaterializerTests : BehaviorSpec({
 
     Given("i have a read test configuration") {
-        val configuration = YamlReader.readToPojo(getTestConfig().path, getTestConfig().inputStream(), Configuration::class.java)
+        val configuration = ConfigurationReader.readConfiguration(getTestConfig().inputStream(), getTestConfig().path)
         val materializer = Materializer(SimpleFileResolver(getResourcesRoot()))
 
         When("materializing the configuration") {

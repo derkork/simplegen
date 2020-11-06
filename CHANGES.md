@@ -5,7 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
-
+### Added
+* SimpleGen now allows for providing data in different formats than YAML. To do so, specify the mime type of the data format you are using in your data section like this:
+  ```yaml
+  - data:
+    - includes: "**/*.toml"
+      mimeType: application/toml
+    
+  ```
+  If you leave out the mime type, SimpleGen will use YAML as the default. As a first supported format, you can now use TOML files to provide data for SimpleGen.
+* There is now an API available for extending SimpleGen. For now this API only allows you to write parsers for custom data formats. 
 ### Changed
 * Updated the project to Kotlin 1.4
 * Replaced Spek testing framework with Kotest as Kotest seems to be a lot more mature. This also fixed that the tests were not running in then Maven build when using Spek.

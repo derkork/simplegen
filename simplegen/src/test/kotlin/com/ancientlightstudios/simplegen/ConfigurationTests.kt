@@ -1,6 +1,5 @@
 package com.ancientlightstudios.simplegen
 
-import com.ancientlightstudios.simplegen.configuration.Configuration
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
@@ -13,10 +12,9 @@ import io.kotest.matchers.shouldNotBe
 class ConfigurationTests : BehaviorSpec({
 
     Given("i have a read test configuration and a materializer") {
-        val configuration = YamlReader.readToPojo(
-                getTestConfig().path,
-                getTestConfig().inputStream(),
-                Configuration::class.java
+        val configuration = ConfigurationReader.readConfiguration(
+            getTestConfig().inputStream(),
+            getTestConfig().path
         )
 
         When("reading the configuration") {

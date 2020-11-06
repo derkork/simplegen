@@ -2,6 +2,9 @@ package com.ancientlightstudios.simplegen.resources
 
 import java.io.File
 
+/**
+ * This
+ */
 class SimpleFileResolver(val basePath: String = ".") : FileResolver {
     override fun resolve(relativePath: String): File {
         val result = FileUtil.resolve(basePath, relativePath)
@@ -11,5 +14,6 @@ class SimpleFileResolver(val basePath: String = ".") : FileResolver {
         return result
     }
 
-    override fun resolve(includes: List<String>, excludes: List<String>): List<File> = FileUtil.resolve(basePath, includes, excludes)
+    override fun resolve(includes: List<String>, excludes: List<String>): List<File> =
+        FileUtil.resolve(basePath, includes, excludes)
 }
