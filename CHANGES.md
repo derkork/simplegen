@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ```
   If you leave out the mime type, SimpleGen will use YAML as the default. As a first supported format, you can now use TOML files to provide data for SimpleGen.
 * There is now an API available for extending SimpleGen. For now this API only allows you to write parsers for custom data formats. 
+* A new built-in filter for accessing environment variables named `env` is now available. You can use it like this:
+  ```jinja2
+  {{ 'HOME' | env }}
+  ```
 ### Changed
 * Updated the project to Kotlin 1.4
 * Replaced Spek testing framework with Kotest as Kotest seems to be a lot more mature. This also fixed that the tests were not running in then Maven build when using Spek.

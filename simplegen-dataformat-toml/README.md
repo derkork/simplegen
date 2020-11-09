@@ -22,3 +22,25 @@ example:
     value3: "bar"
     value4: "baz"
 ```
+## Usage in SimpleGen
+
+To read data in TOML format, simply add a `mimeType` indicator to your data section:
+
+```yaml
+transformations:
+  - data:
+      - includes: data.toml
+        mimeType: application/toml
+    # add template, nodes and outputPath configuration as usual
+```
+
+You can also mix and match data of different types:
+
+```yaml
+transformations:
+  - data:
+      - includes: data.toml
+        mimeType: application/toml
+      - other_data.yaml
+    # add template, nodes and outputPath configuration as usual
+```
