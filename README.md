@@ -267,6 +267,14 @@ It is also possible to inject data through system properties using the `sp` filt
 
 ```
 
+Similarly, you can access environment variables using the `env` filter. Note that these variables are dependent on the operating system, so your templates may not be portable when relying on environment variables:
+
+```jinja2
+# will print the path of the user's home directory on Linux/OSX
+{{ 'HOME' | env }}  
+```
+
+
 Finally a thing that is often required when generating code is case-changing of identifiers, so SimpleGen adds a custom filter for this as well. The syntax of this filter is:
 
 ```jinja2
