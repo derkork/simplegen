@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.ancientlightstudios</groupId>
         <artifactId>simplegen-root</artifactId>
-        <version>2.0.0</version>
+        <version>2.1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <name>SimpleGen - Maven Plugin</name>
@@ -22,6 +22,10 @@
         <dependency>
             <groupId>com.ancientlightstudios</groupId>
             <artifactId>simplegen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ancientlightstudios</groupId>
+            <artifactId>simplegen-dataformat-toml</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
