@@ -12,6 +12,9 @@
     <artifactId>simplegen-aio</artifactId>
     <name>SimpleGen - All In One Package</name>
     <description>SimpleGen packaged as All-in-one solution with all modules.</description>
+    <properties>
+        <shade.plugin.version>3.2.4</shade.plugin.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -21,6 +24,12 @@
         <dependency>
             <groupId>com.ancientlightstudios</groupId>
             <artifactId>simplegen-dataformat-toml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>${shade.plugin.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.kotest</groupId>
@@ -41,46 +50,49 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+        <finalName>simplegen-bundle</finalName>
 
         <plugins>
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <groupId>org.jetbrains.kotlin</groupId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${shade.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <!-- Make sure that the SPI values are not overwriting each other -->
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <!-- Avoid GraalVM languages overwriting each other -->
+                                <transformer implementation="com.ancientlightstudios.maven.GraalVmLanguageTransformer"/>
+                                <!-- Set main class -->
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.ancientlightstudios.simplegen.MainKt</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.ancientlightstudios</groupId>
+                        <artifactId>simplegen-aio</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>standalone-app</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <version>3.2.4</version>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>shade</goal>
-                                </goals>
-                                <configuration>
-                                    <transformers>
-                                        <!-- Make sure that the SPI values are not overwriting each other -->
-                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                            <mainClass>com.ancientlightstudios.simplegen.MainKt</mainClass>
-                                        </transformer>
-                                    </transformers>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
