@@ -53,6 +53,7 @@
         <module>simplegen-api</module>
         <module>simplegen</module>
         <module>simplegen-dataformat-toml</module>
+        <module>simplegen-dataformat-xml</module>
         <module>simplegen-aio</module>
         <module>simplegen-maven-plugin</module>
     </modules>
@@ -82,6 +83,11 @@
             <dependency>
                 <groupId>com.ancientlightstudios</groupId>
                 <artifactId>simplegen-dataformat-toml</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ancientlightstudios</groupId>
+                <artifactId>simplegen-dataformat-xml</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -118,6 +124,11 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.woodstox</groupId>
+                <artifactId>woodstox-core</artifactId>
+                <version>5.1.0</version>
             </dependency>
             <dependency>
                 <groupId>com.teesoft</groupId>
