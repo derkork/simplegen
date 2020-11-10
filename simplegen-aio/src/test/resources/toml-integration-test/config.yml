@@ -1,0 +1,7 @@
+transformations:
+  - data:
+      - includes: data.toml
+        mimeType: application/toml
+    template: template.j2
+    nodes: $
+    outputPath: result.txt

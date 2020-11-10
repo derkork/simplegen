@@ -7,7 +7,7 @@
 
     <groupId>com.ancientlightstudios</groupId>
     <artifactId>simplegen-root</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
     <packaging>pom</packaging>
 
     <name>SimpleGen - ROOT</name>
@@ -45,10 +45,15 @@
         <kotest.version>4.3.1</kotest.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
     <modules>
+        <module>simplegen-api</module>
         <module>simplegen</module>
+        <module>simplegen-dataformat-toml</module>
+        <module>simplegen-aio</module>
         <module>simplegen-maven-plugin</module>
     </modules>
 
@@ -67,6 +72,21 @@
             <dependency>
                 <groupId>com.ancientlightstudios</groupId>
                 <artifactId>simplegen</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ancientlightstudios</groupId>
+                <artifactId>simplegen-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ancientlightstudios</groupId>
+                <artifactId>simplegen-dataformat-toml</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ancientlightstudios</groupId>
+                <artifactId>simplegen-aio</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -98,6 +118,11 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.teesoft</groupId>
+                <artifactId>jackson-dataformat-toml</artifactId>
+                <version>1.0</version>
             </dependency>
             <dependency>
                 <groupId>com.jayway.jsonpath</groupId>
@@ -292,6 +317,10 @@
 
 
     <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>

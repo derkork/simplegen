@@ -1,6 +1,6 @@
 # SimpleGen -  A simple yet powerful general-purpose code generator
 
-![Travis (.org)](https://img.shields.io/travis/derkork/simplegen)
+![GitHub build status](https://img.shields.io/github/workflow/status/derkork/simplegen/Build%20&%20Test)
 ![Maven Central](https://img.shields.io/maven-central/v/com.ancientlightstudios/simplegen)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/derkork/simplegen)
 
@@ -19,8 +19,8 @@ SimpleGen takes data in YAML format and runs this data through a Jinja2 template
     +------------+
     |            +-+
     |    Data    | |
-    |   (YAML)   | | +----+
-    |            | |      |                            +------------+
+    |  (various  | | +----+
+    |  formats)  | |      |                            +------------+
     +------------+ |      |     +-------------+        |            +-+
       +------------+      +---> |             |        |   Output   | +-+
                                 |  SimpleGen  +------> |   (Text)   | | |
@@ -52,7 +52,7 @@ The generator can be used standalone or as a Maven plugin. In both cases it expe
 To use the generator through the command line, [download the latest version](https://github.com/derkork/simplegen/releases/latest) from GitHub. Then you can invoke the code generator by running:
 
 ```
-java -jar simplegen-<version>.jar \
+java -jar simplegen-aio-<version>.jar \
   --sourceDirectory <path to input structure> \
   --outputDirectory <path for generated files>
 ```
@@ -104,36 +104,38 @@ command line option or the `<forceUpdate>true</forceUpdate>` Maven setting.
 
 ### Data
 
-The data is a very important part of the workflow as it is the basis on which all templates are processed. There is
-no specific data model (except that it has to be YAML) so you can choose a YAML structure that suits the needs of
-your project. In this example let's create Java base classes from a model. The data file for this could look like this:
+The data is a very important part of the workflow as it is the basis on which all templates are processed. Data is
+parsed from data files into a map-like tree structure. You can use multiple source files for your data. SimpleGen
+parses each file into a map-like tree structure and then merges all the trees into a single tree. This final tree
+is the input for your templates.
+
+Data can be given in various formats, the default being YAML:
 
 ```yaml
-myclasses:
-  - package: com.ancientlightstudios.myapp
-    name: SomeClass
-    fields:
-      - name: someField
-        visibility: private
-    	type: java.lang.String
-    	
-  - package: com.ancientlightstudios.myapp
-    name: SomeOtherClass
-    fields:
-      - name: someField
-        visibility: public
-        type: boolean
+settings:
+  - name: fooCount
+    description: How much foo you need.
+    type: integer
+    min: 1
+    max: 100
+
+  - name: barUrl
+    description: URL to the bar system.
+    type: string
 ```
 
-Again, the data file is totally free-form, you can structure it any way that fits your needs. There are no special keywords
-that the generator acts upon, it's just a structured data file. Now that we have the data in place, we can start working
-on the template.
+Again, the data file is totally free-form, you can structure it any way that fits your needs. There are no special keywords that the generator acts upon, it's just a structured data file that drives code generation with your templates. E.g. if you want to generate code for settings, put in some settings. If you want to generate a static website, put in your content, etc. 
+
+In addition to YAML the following data formats are supported:
+
+* [TOML](simplegen-dataformat-toml/README.md)
+
+
+Now that we have the data in place, we can start working on the template.
 
 ### Templates
   
-The templates control what output is produced. Templates are written in the Jinja2 template language. You can configure 
-SimpleGen to run a template for a series of nodes in your YAML structure. In this example we configure SimpleGen to run 
-the following template for each of the children of the `myclasses` node.
+The templates control what output is produced. Templates are written in the Jinja2 template language. You can configure SimpleGen to run a template for a series of nodes in your YAML structure. In this example we configure SimpleGen to run the following template for each of the children of the `myclasses` node.
 
 ```jinja2
 package {{ node.package }};
@@ -161,25 +163,20 @@ protected abstract class {{ node.name }}Base {
 }
 ```
 
-The template creates a base class with the defined fields and getters and setters ()which is not particulary useful but it 
-should be sufficient to get the idea across). Inside of the template you have access to two variables:
+The template creates a base class with the defined fields and getters and setters ()which is not particulary useful but it should be sufficient to get the idea across). Inside of the template you have access to two variables:
 
-* ``node`` - this is the part of the data that is currently being processed. In this example it would be the current node
-  below the ``myclasses`` parent.
-* ``data`` - this contains the whole data from all scanned data files. This can be useful if you have global information
-  that you want to share across templates.
+* ``node`` - this is the part of the data that is currently being processed. In this example it would be the current node below the ``myclasses`` parent.
+* ``data`` - this contains the whole data from all scanned data files. This can be useful if you have global information  that you want to share across templates.
   
-You can use every feature of the Jinja2 language including macros, includes, etc. When you include things remember that
-all paths must be specified relative to the ``config.yml`` file. See the _Advanced_ section below for some of the built-in
-features that you can use inside of the templates. 
+You can use every feature of the Jinja2 language including macros, includes, etc. When you include things remember that all paths must be specified relative to the ``config.yml`` file. See the _Advanced_ section below for some of the built-in features that you can use inside of the templates. 
 
 
 ### Configuration
 
 Now that we have data and a template, the last remaining step is to tell SimpleGen how to process these. You do this
-inside the `config.yml` file. Inside of that file you can define a series of transformations that SimpleGen should
-perform. Each transformation will read in YAML data from one or more files and then apply this data to a template
-for a subset of the nodes from the YAML data: 
+inside the `config.yml` file. There you can define a series of transformations that SimpleGen should
+perform. Each transformation will read in data from one or more files and then apply this data to a template
+for a subset of the nodes from the parsed data: 
 
 ```yaml
 transformations:
@@ -197,6 +194,10 @@ transformations:
       - includes: **/*.yml
         excludes: config.yml
         basePath: .
+      # Starting from version 2.1.0 SimpleGen supports additional data formats. You can specify a mime type 
+      # if you want to use a different format than yaml. If no mime type is specified, yaml is assumed.
+      - includes: **/*.toml
+        mimeType: application/toml
       
     # Which template should be used to render the data. Specify the path relative to the config.yml file.  
     template: template.j2
@@ -206,9 +207,7 @@ transformations:
     # you should use an expression here, to tell SimpleGen the output file name for each processed node.
     outputPath: "{{ node.package | replace('.', '/') }}/{{ node.name }}.java"
 ```
-
-You can use expressions in all fields of the configuration. So e.g. if you want to pull
-data from a folder set by a system property you can do it like this:
+You can use expressions in all fields of the configuration. So e.g. if you want to pull data from a folder set by a system property you can do it like this:
 
 ```yaml
 # Assuming you have set the system property 'input.path' to '/some/path'
@@ -218,9 +217,7 @@ transformations:
       - includes: **/.yml
         basePath: "{{ 'input.path' | sp }}"  # will set the basePath to /some/path
 ```
-You can also configure the template engine within `config.yml`. The template engine
-configuration is optional, if you leave it out, all values will be initialized with `false`. The configuration
-can be done globally or per transformation:
+You can also configure the template engine within `config.yml`. The template engine configuration is optional, if you leave it out, all values will be initialized with `false`. The configuration can be done globally or per transformation:
 
 ```yaml
 # This is the global configuration. 
@@ -250,13 +247,11 @@ transformations:
 ```
 ### Advanced
 
-Congratulations, you've made it through the documentation! This section contains some additional information that
-you may not need in each and every project but that is useful in some circumstances. 
+Congratulations, you've made it through the documentation! This section contains some additional information that you may not need in each and every project but that is useful in some circumstances. 
 
 #### Additional built-in filters
 
-In addition to the standard filters, this package adds a `jsonpath` filter to the template engine, so you can use 
-JSONPath to effectively select interesting substructures of your data:
+In addition to the standard filters, this package adds a `jsonpath` filter to the template engine, so you can use JSONPath to effectively select interesting substructures of your data:
 
 ```jinja2
 {# find all private fields of the class #}
@@ -264,8 +259,7 @@ JSONPath to effectively select interesting substructures of your data:
 
 ```
 
-See the [JsonPath GitHub project](https://github.com/json-path/JsonPath) for a full documentation on how JsonPath works
-and what expressions you can use.
+See the [JsonPath GitHub project](https://github.com/json-path/JsonPath) for a full documentation on how JsonPath works and what expressions you can use.
 
 It is also possible to inject data through system properties using the `sp` filter:
   
@@ -275,8 +269,15 @@ It is also possible to inject data through system properties using the `sp` filt
 
 ```
 
-Finally a thing that is often required when generating code is case-changing of identifiers, so SimpleGen adds a
-custom filter for this as well. The syntax of this filter is:
+Similarly, you can access environment variables using the `env` filter. Note that these variables are dependent on the operating system, so your templates may not be portable when relying on environment variables:
+
+```jinja2
+# will print the path of the user's home directory on Linux/OSX
+{{ 'HOME' | env }}  
+```
+
+
+Finally a thing that is often required when generating code is case-changing of identifiers, so SimpleGen adds a custom filter for this as well. The syntax of this filter is:
 
 ```jinja2
 case( <input case>, <output case> )
@@ -299,9 +300,7 @@ Supported case formats are:
 
 #### Custom filters
 
-If you have specific needs for your project you can also write custom filters in JavaScript. A filter is simply a javascript 
-function that receives objects and works on them. The functions will be executed inside the GraalVM scripting engine
-so you can use all of it's functionality (including full access to the Java API) in your scripts. 
+If you have specific needs for your project you can also write custom filters in JavaScript. A filter is simply a javascript function that receives objects and works on them. The functions will be executed inside the GraalVM scripting engine so you can use all of it's functionality (including full access to the Java API) in your scripts. 
 
 ```javascript
 // a simple filter which multiplies the input
@@ -315,8 +314,7 @@ The three arguments of the function are:
 * `resolve` - a function that can be used to resolve template variables. See below for an example.
 * `arguments` - the arguments given to the filter in the template (an array of strings)
 
-You can access the template context in your custom filter. This is useful, if you would like to get access to some data
-in the `data` or `node` variables.
+You can access the template context in your custom filter. This is useful, if you would like to get access to some data in the `data` or `node` variables.
 
 ```javascript
 // a simple filter which reads some value from the template context

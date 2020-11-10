@@ -1,6 +1,7 @@
 package com.ancientlightstudios.simplegen
 
 import com.ancientlightstudios.simplegen.filters.CaseFilter
+import com.ancientlightstudios.simplegen.filters.EnvironmentVariableFilter
 import com.ancientlightstudios.simplegen.filters.JsonPathFilter
 import com.ancientlightstudios.simplegen.filters.SystemPropertyFilter
 import com.ancientlightstudios.simplegen.resources.FileResolver
@@ -22,6 +23,7 @@ class TemplateEngine(fileResolver: FileResolver, arguments: TemplateEngineArgume
         templateEngine.globalContext.registerFilter(JsonPathFilter())
         templateEngine.globalContext.registerFilter(SystemPropertyFilter())
         templateEngine.globalContext.registerFilter(CaseFilter())
+        templateEngine.globalContext.registerFilter(EnvironmentVariableFilter())
 
         arguments.additionalFilters.forEach { additionalFilter -> templateEngine.globalContext.registerFilter(additionalFilter) }
     }

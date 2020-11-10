@@ -1,6 +1,6 @@
 The SimpleGen code generator is licensed under the MIT License. 
 
-Copyright (c) 2016: Jan Thomä
+Copyright (c) 2016-2020: Jan Thomä
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
 documentation files (the "Software"), to deal in the Software without restriction, including without limitation 

@@ -1,0 +1,8 @@
+customFilters:
+  - script: convert.js
+    function: convert
+
+transformations:
+  - template: template.j2
+    nodes: $
+    outputPath: result.txt

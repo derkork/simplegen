@@ -1,6 +1,5 @@
 package com.ancientlightstudios.simplegen
 
-import com.ancientlightstudios.simplegen.configuration.Configuration
 import com.ancientlightstudios.simplegen.resources.FileNotResolvedException
 import com.ancientlightstudios.simplegen.resources.FileUtil
 import com.ancientlightstudios.simplegen.resources.SimpleFileResolver
@@ -27,19 +26,19 @@ class Runner(private val basePath: String = ".",
         val configFile = try {
             FileUtil.resolve(basePath, configPath)
         } catch (e: FileNotResolvedException) {
-            log.error("No configuration file $configPath present in $basePath.")
+            log.error("No configuration file '$configPath' present in '$basePath'.")
             return false
         }
 
         if (!configFile.exists()) {
-            log.error("No configuration file $configPath present in $basePath.")
+            log.error("No configuration file '$configPath' present in '$basePath'.")
             return false
         }
 
         try {
 
             val config = configFile.inputStream().use {
-                YamlReader.readToPojo(configFile.path, it, Configuration::class.java)
+                ConfigurationReader.readConfiguration(it, configFile.path)
             }
 
             val materializer = Materializer(fileResolver)
@@ -61,7 +60,9 @@ class Runner(private val basePath: String = ".",
             handle(e)
         } catch (e: TemplateErrorException) {
             handle(e)
-        } catch (e: YamlErrorException) {
+        } catch (e: ConfigurationException) {
+            handle(e)
+        } catch( e: DataParseException) {
             handle(e)
         } catch (e: Exception) {
             handle(e)
@@ -120,8 +121,13 @@ class Runner(private val basePath: String = ".",
         }
     }
 
-    private fun handle(e: YamlErrorException) {
-        log.error("When parsing YAML file: '${e.source}'")
+    private fun handle(e: ConfigurationException) {
+        log.error("When parsing configuration YAML file: '${e.origin}'")
+        log.error(" ${e.message}")
+    }
+
+    private fun handle(e: DataParseException) {
+        log.error("When parsing data file: '${e.origin}'")
         log.error(" ${e.message}")
     }
 
