@@ -1,6 +1,6 @@
 # SimpleGen -  A simple yet powerful general-purpose code generator
 
-![Travis (.org)](https://img.shields.io/travis/derkork/simplegen)
+![GitHub build status](https://img.shields.io/github/workflow/status/derkork/simplegen/Build%20&%20Test)
 ![Maven Central](https://img.shields.io/maven-central/v/com.ancientlightstudios/simplegen)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/derkork/simplegen)
 
@@ -109,27 +109,29 @@ parsed from data files into a map-like tree structure. You can use multiple sour
 parses each file into a map-like tree structure and then merges all the trees into a single tree. This final tree
 is the input for your templates.
 
-SimpleGen supports the YAML format out of the box for specifying your data. You can load additional plugins to
-support other data formats like TOML, CSV, etc.
+Data can be given in various formats, the default being YAML:
 
 ```yaml
-myclasses:
-  - package: com.ancientlightstudios.myapp
-    name: SomeClass
-    fields:
-      - name: someField
-        visibility: private
-    	type: java.lang.String
-    	
-  - package: com.ancientlightstudios.myapp
-    name: SomeOtherClass
-    fields:
-      - name: someField
-        visibility: public
-        type: boolean
+settings:
+  - name: fooCount
+    description: How much foo you need.
+    type: integer
+    min: 1
+    max: 100
+
+  - name: barUrl
+    description: URL to the bar system.
+    type: string
 ```
 
-Again, the data file is totally free-form, you can structure it any way that fits your needs. There are no special keywords that the generator acts upon, it's just a structured data file. Now that we have the data in place, we can start working on the template.
+Again, the data file is totally free-form, you can structure it any way that fits your needs. There are no special keywords that the generator acts upon, it's just a structured data file that drives code generation with your templates. E.g. if you want to generate code for settings, put in some settings. If you want to generate a static website, put in your content, etc. 
+
+In addition to YAML the following data formats are supported:
+
+* [TOML](simplegen-dataformat-toml/README.md)
+
+
+Now that we have the data in place, we can start working on the template.
 
 ### Templates
   
