@@ -1,0 +1,11 @@
+customFilters:
+  - script: evaluate.js
+    function: evaluate
+
+transformations:
+  - data:
+      - includes: data.xml
+        mimeType: application/xml
+    template: template.j2
+    nodes: $
+    outputPath: result.txt

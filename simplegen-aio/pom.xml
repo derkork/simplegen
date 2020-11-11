@@ -26,6 +26,10 @@
             <artifactId>simplegen-dataformat-toml</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.ancientlightstudios</groupId>
+            <artifactId>simplegen-dataformat-xml</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
             <version>${shade.plugin.version}</version>

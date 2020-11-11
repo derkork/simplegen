@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<settings>
+    <element1>t</element1>
+    <element2 attr2="r"/>
+    <element3>
+        <property>u</property>
+    </element3>
+    <element4>
+        <item value="e"/>
+        <item value="v"/>
+        <item value="a"/>
+        <item value="l"/>
+    </element4>
+</settings>
+
+<!--
+
+-->

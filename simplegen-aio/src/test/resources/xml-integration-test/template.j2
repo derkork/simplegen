@@ -1,0 +1,5 @@
+works={{ data | jsonpath('settings.>[*].element1.@text') | first
+    }}{{ data | jsonpath('settings.>[*].element2.attr2') | first
+    }}{{ data | jsonpath('settings.>[*].element3.>[*].property.@text') | first
+    }}{{ data | jsonpath('settings.>[*].element4.>[*].item.value') | first }}
+js={{ data.settings | evaluate }}
