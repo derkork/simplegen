@@ -135,7 +135,12 @@ Now that we have the data in place, we can start working on the template.
 
 ### Templates
   
-The templates control what output is produced. Templates are written in the Jinja2 template language. You can configure SimpleGen to run a template for a series of nodes in your YAML structure. In this example we configure SimpleGen to generate a settings Java class based on the settings we created in our YAML data and some documentation for the end user. 
+The templates control what output is produced. Templates are written in the Jinja2 template language. You can configure SimpleGen to run a template for a series of nodes in your YAML structure. In this example we configure SimpleGen to generate a settings Java class based on the settings we created in our YAML data and some documentation for the end user.  In these templates you will see two variables that are being used:
+
+* `node` - when you run SimpleGen you can configure that for each entry of a list in your data a copy of a certain template should be rendered. E.g. for our HTML example, we would generate a copy of this template for each setting in our `settings` list so every time the template is processed, `node` will contain the current entry in the list of settings.
+* `data` - this contains the whole merged data tree from all scanned data files. This can be useful if you have global information  that you want to share across templates or if you want to create a single file from all data that you have.
+
+You can use every feature of the Jinja2 template language including macros, includes, etc. When you include things remember that all paths must be specified relative to the `config.yml` file. SimpleGen also defines some additional filters on top of the Jinja2 built-ins that are quite useful. See the _Advanced_ section below for details on these.
 
 ```java
 package com.example.settings;
@@ -179,12 +184,7 @@ This setting is of type <code>{{ node.type }}</code>.
 </body>
 </html>
 ```
-This is probably going to look very ugly, but I think it gets the point across. In these templates you see two variables that are being used:
-
-* `node` - when you run SimpleGen you can configure that for each entry of a list in your data a copy of a certain template should be rendered. If you do this, the `node` value will contain the current entry in the list. E.g. for our HTML example, we would generate a copy of this template for each setting in our `settings` list.
-* `data` - this contains the whole merged data tree from all scanned data files. This can be useful if you have global information  that you want to share across templates.
-  
-You can use every feature of the Jinja2 language including macros, includes, etc. When you include things remember that all paths must be specified relative to the ``config.yml`` file. SimpleGen also defines some additional filters on top of the Jinja2 built-ins that are quite useful. See the _Advanced_ section below for details on these. 
+This is probably going to look very ugly, but I think it gets the point across.
 
 
 ### Configuration
