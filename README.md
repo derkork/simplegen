@@ -129,6 +129,7 @@ Again, the data file is totally free-form, you can structure it any way that fit
 In addition to YAML the following data formats are supported:
 
 * [TOML](simplegen-dataformat-toml/README.md)
+* [XML](simplegen-dataformat-xml/README.md)
 
 
 Now that we have the data in place, we can start working on the template.
