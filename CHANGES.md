@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [2.1.0] 2020-11-11
 ### Added
 * SimpleGen now allows for providing data in different formats than YAML. To do so, specify the mime type of the data format you are using in your data section like this:
   ```yaml
@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       mimeType: application/toml
     
   ```
-  If you leave out the mime type, SimpleGen will use YAML as the default. As a first supported format, you can now use [TOML](simplegen-dataformat-toml/README.md) files to provide data for SimpleGen.
+  If you leave out the mime type, SimpleGen will use YAML as the default. You can now use [TOML](simplegen-dataformat-toml/README.md) and [XML](simplegen-dataformat-xml/README.md) files to provide data for SimpleGen.
 * There is now an API available for extending SimpleGen. For now this API only allows you to write parsers for custom data formats. 
 * A new built-in filter for accessing environment variables named `env` is now available. You can use it like this:
   ```jinja2
