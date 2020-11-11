@@ -12,7 +12,7 @@ documentation websites.
 
 ## How SimpleGen works
 
-SimpleGen takes data in YAML format and runs this data through a Jinja2 template to generate output files:
+SimpleGen takes data in various formats and runs this data through a Jinja2 template to generate output files:
 
 
 ```ditaa
@@ -45,7 +45,7 @@ SimpleGen takes data in YAML format and runs this data through a Jinja2 template
 The generator can be used standalone or as a Maven plugin. In both cases it expects an input structure that looks like this:
  
 * ``config.yml`` - the configuration file
-* ``data.yml`` - a data file (you can choose any name you want, actually)
+* ``data.yml`` - a data file (optional, can also be in other formats, you can choose any name you like)
 * ``template.j2`` - at least one template
 
 ## Running through the command line
@@ -57,12 +57,11 @@ java -jar simplegen-aio-<version>.jar \
   --outputDirectory <path for generated files>
 ```
 
-This will read the input structure from the input directory, generate the code and place the generated files in the
-output directory.  
+This will read the input structure from the input directory, generate the code and place the generated files in the output directory.  
 
 ## Running with Maven
 
-Simply add the Maven plugin to your build plugins:
+Simply add the [Maven plugin](simplegen-maven-plugin/README.md) to your build plugins:
 
 ```xml
     <build>
