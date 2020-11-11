@@ -21,7 +21,10 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Publish package
-        run: mvn -B -Prelease deploy
+        run: |
+            export GPG_TTY=$(tty)
+            mvn -B -Prelease deploy
+        shell: bash
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
