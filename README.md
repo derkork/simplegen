@@ -114,13 +114,13 @@ Data can be given in various formats, the default being YAML:
 settings:
   - name: fooCount
     description: How much foo you need.
-    type: integer
+    type: int
     min: 1
     max: 100
 
   - name: barUrl
     description: URL to the bar system.
-    type: string
+    type: String
 ```
 
 Again, the data file is totally free-form, you can structure it any way that fits your needs. There are no special keywords that the generator acts upon, it's just a structured data file that drives code generation with your templates. E.g. if you want to generate code for settings, put in some settings. If you want to generate a static website, put in your content, etc. 
@@ -135,52 +135,65 @@ Now that we have the data in place, we can start working on the template.
 
 ### Templates
   
-The templates control what output is produced. Templates are written in the Jinja2 template language. You can configure SimpleGen to run a template for a series of nodes in your YAML structure. In this example we configure SimpleGen to run the following template for each of the children of the `myclasses` node.
+The templates control what output is produced. Templates are written in the Jinja2 template language. You can configure SimpleGen to run a template for a series of nodes in your YAML structure. In this example we configure SimpleGen to generate a settings Java class based on the settings we created in our YAML data and some documentation for the end user. 
 
-```jinja2
-package {{ node.package }};
+```java
+package com.example.settings;
 
-{# We want to create a base class, so we take the class name and append 'Base' #}
-protected abstract class {{ node.name }}Base {
+public class ApplicationSettings {
     
-    {#  Create the fields #}
-    {% for field in node.fields %}
+    {#  Create the fields for the settings. #}
+    {% for setting in data.settings %}
 
+    {# We can create a Javadoc from the description. #}
+    /**
+     * {{setting.description}}
+     */
     {# The field itself #}
-    {{ field.visibility }} {{ field.type }} {{ field.name }};
+    private {{setting.type}} {{setting.name}};
 
-
-    {# a getter, we use the built-in case-filter to convert the field name to a method name #}
-    {{ field.visibility }} {{ field.type }} get{{ field.name | case('lower-camel', 'upper-camel') }}() {
-        return this.{{field.name}};
+    {# a getter, we use the built-in case-filter to convert the settings name to a method name #}
+    public  {{ setting.type }} get{{ setting.name | case('lower-camel', 'upper-camel') }}() {
+        return this.{{setting.name}};
     }
 
     {# a setter #}
-    {{ field.visibility }} void set{{ field.name | case('lower-camel', 'upper-camel') }}({{ field.type }} value) {
-        this.{{field.name}} = value;
+    public void set{{ setting.name | case('lower-camel', 'upper-camel') }}({{ setting.type }} value) {
+        this.{{setting.name}} = value;
     }
     {% endfor %}
 }
 ```
 
-The template creates a base class with the defined fields and getters and setters ()which is not particulary useful but it should be sufficient to get the idea across). Inside of the template you have access to two variables:
+The template creates a java class with the defined settings each of them getting a field a getter and a setter. You could also generate code that reads settings from a file and validates them for the constraints given (e.g. required files, min and max size, etc.) but I left this out for clarity.
 
-* ``node`` - this is the part of the data that is currently being processed. In this example it would be the current node below the ``myclasses`` parent.
-* ``data`` - this contains the whole data from all scanned data files. This can be useful if you have global information  that you want to share across templates.
+Now in addition we would like to have some documentation for the settings. So for each setting we would like to create an HTML file with a description of the settings. In a real scenario you will probably have all in one file, but I want to show how you can use the same data to generate a single file and multiple files.
+
+```html
+<html>
+<body>
+<h1>{{node.name}}</h1>
+{{node.description}}
+
+This setting is of type <code>{{ node.type }}</code>.
+</body>
+</html>
+```
+This is probably going to look very ugly, but I think it gets the point across. In these templates you see two variables that are being used:
+
+* `node` - when you run SimpleGen you can configure that for each entry of a list in your data a copy of a certain template should be rendered. If you do this, the `node` value will contain the current entry in the list. E.g. for our HTML example, we would generate a copy of this template for each setting in our `settings` list.
+* `data` - this contains the whole merged data tree from all scanned data files. This can be useful if you have global information  that you want to share across templates.
   
-You can use every feature of the Jinja2 language including macros, includes, etc. When you include things remember that all paths must be specified relative to the ``config.yml`` file. See the _Advanced_ section below for some of the built-in features that you can use inside of the templates. 
+You can use every feature of the Jinja2 language including macros, includes, etc. When you include things remember that all paths must be specified relative to the ``config.yml`` file. SimpleGen also defines some additional filters on top of the Jinja2 built-ins that are quite useful. See the _Advanced_ section below for details on these. 
 
 
 ### Configuration
 
-Now that we have data and a template, the last remaining step is to tell SimpleGen how to process these. You do this
-inside the `config.yml` file. There you can define a series of transformations that SimpleGen should
-perform. Each transformation will read in data from one or more files and then apply this data to a template
-for a subset of the nodes from the parsed data: 
+Now that we have data and a template, the last remaining step is to tell SimpleGen how to process these. You do this inside the `config.yml` file. There you can define a series of transformations that SimpleGen should perform. Each transformation will read in data from one or more files and then apply this data to a template for a subset of the nodes from the parsed data: 
 
 ```yaml
+# You can have multiple transformations.
 transformations:
-  
     # From where to pull the data. You can pull more than one file, in which case their contents get merged.
     # Paths are relative to the config.yml file unless you specify an absolute path.
   - data: 
@@ -189,24 +202,44 @@ transformations:
       # Also ant style file selection is supported, this fetches data from all YAML files below the
       # folder where config.yml is located (including config.yml)
       - **/*.yml
-      # If you want more control you can specify includes and excludes. E.g. if you don't want to have config.yml
+      # If you want more control you can specify includes and excludes.
+      # E.g. if you don't want to have config.yml as part of your data 
       # you can exclude it:
       - includes: **/*.yml
         excludes: config.yml
         basePath: .
+      # It is usally a good practice to put your data files into a subfolder, so you 
+      # don't need to exclude the config.yml.
+      - data/**/*.yml
       # Starting from version 2.1.0 SimpleGen supports additional data formats. You can specify a mime type 
       # if you want to use a different format than yaml. If no mime type is specified, yaml is assumed.
       - includes: **/*.toml
         mimeType: application/toml
       
     # Which template should be used to render the data. Specify the path relative to the config.yml file.  
-    template: template.j2
+    template: settings-class.java.j2
+
     # For which nodes in the data should the template be executed. This is a JsonPath.
-    nodes: myclasses
-    # What should be the output path of the generated file. If you generate multiple files
-    # you should use an expression here, to tell SimpleGen the output file name for each processed node.
-    outputPath: "{{ node.package | replace('.', '/') }}/{{ node.name }}.java"
+    # Note how we use $ here, which means the root node. Since this is only a single node
+    # SimpleGen will only generate a single file in this transformation.
+    nodes: $
+    # What should be the output path of the generated file. 
+    outputPath: "com/example/settings/ApplicationSettings.java"
+  
+  # Now a second transformation for generating the HTML files
+  - data: 
+      - data.yml
+    # Use the HTML template to generate the HTML documentation.
+    template: documentation.html.j2
+    # Repeat this for each of the settings in our list.
+    nodes: $.settings
+    # Because we create one file for each setting, we need to have
+    # a unique file name for each generated output file. We can do this
+    # by using an expression in the output path. This uses
+    # node.name which is the name of the setting. 
+    outputPath: "docs/{{ node.name }}.html"
 ```
+
 You can use expressions in all fields of the configuration. So e.g. if you want to pull data from a folder set by a system property you can do it like this:
 
 ```yaml
