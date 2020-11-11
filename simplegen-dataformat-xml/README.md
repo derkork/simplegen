@@ -4,7 +4,29 @@ This package provides support for using XML as data files. Since XML has more po
 
 XML has elements, attributes and text nodes which can be nested with each other. This structure has no direct match in a tree-like map structure. This parser tries to parse XML in a reproducible way that is easy to interact with from the template engine while keeping the semantics of XML intact.
 
-## Parsing
+## Usage
+To read data in XML format, simply add a `mimeType` indicator to your data section:
+
+```yaml
+transformations:
+  - data:
+      - includes: data.xml
+        mimeType: application/xml
+    # add template, nodes and outputPath configuration as usual
+```
+
+You can also mix and match data of different types:
+
+```yaml
+transformations:
+  - data:
+      - includes: data.xml
+        mimeType: application/xml
+      - other_data.yaml
+    # add template, nodes and outputPath configuration as usual
+```
+
+## How XML is converted during parsing
 The following XML:
 
 ```xml
