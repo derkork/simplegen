@@ -20,9 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   {{ 'HOME' | env }}
   ```
 ### Changed
-* Fixed a packaging error for the maven plugin and standalone jar that would prevent custom javascript filters from working when they used the `Regex` class.
 * Updated the project to Kotlin 1.4
 * Replaced Spek testing framework with Kotest as Kotest seems to be a lot more mature. This also fixed that the tests were not running in then Maven build when using Spek.
+
+### Fixed
+* Fixed a packaging error for the maven plugin and standalone jar that would prevent custom javascript filters from working when they used the `Regex` class.
 
 ### Security
 * Update `ant` and `guava` dependencies to mitigate security issues.
