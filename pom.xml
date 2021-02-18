@@ -40,7 +40,7 @@
     <properties>
         <kotlin.version>1.4.10</kotlin.version>
         <dokka.version>0.9.17</dokka.version>
-        <jackson.version>2.10.1</jackson.version>
+        <jackson.version>2.12.1</jackson.version>
         <graalvm.version>19.2.0</graalvm.version>
         <kotest.version>4.3.1</kotest.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
