@@ -2,6 +2,7 @@ package com.ancientlightstudios.simplegen
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldMatch
 
 class XmlIntegrationTest : BehaviorSpec({
 
@@ -18,7 +19,7 @@ class XmlIntegrationTest : BehaviorSpec({
                 outputFile.exists() shouldBe true
             }
             Then("the output file contains the correct data") {
-                outputFile.readText() shouldBe "works=true\njs=eval"
+                outputFile.readText() shouldMatch  "works=true[\\r\\n]+js=eval"
             }
         }
     }
