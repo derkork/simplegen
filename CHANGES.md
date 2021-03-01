@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.1] 2021-03-01
+### Fixed
+* Fixed a parse error when parsing TOML files having quotes in their string values.
+
+### Security
+* Updated the `jackson` and `ant` dependencies to mitigate security issues.
+
 ## [2.1.0] 2020-11-11
 ### Added
 * SimpleGen now allows for providing data in different formats than YAML. To do so, specify the mime type of the data format you are using in your data section like this:
@@ -27,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed a packaging error for the maven plugin and standalone jar that would prevent custom javascript filters from working when they used the `Regex` class.
 
 ### Security
-* Update `ant` and `guava` dependencies to mitigate security issues.
+* Updated `ant` and `guava` dependencies to mitigate security issues.
 
 ## [2.0.0] - 2020-02-10
 ### Added
@@ -47,8 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     }
     ```
 ### Security
-* Update `jackson` libraries to mitigate various CVEs.
-* Update `jinjava` library to mitigate CVE-2018-18893.
+* Updated `jackson` libraries to mitigate various CVEs.
+* Updated `jinjava` library to mitigate CVE-2018-18893.
 
 ## [1.0.8] - 2018-12-12
 ### Added
