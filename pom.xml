@@ -7,7 +7,7 @@
 
     <groupId>com.ancientlightstudios</groupId>
     <artifactId>simplegen-root</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
     <packaging>pom</packaging>
 
     <name>SimpleGen - ROOT</name>
@@ -40,7 +40,7 @@
     <properties>
         <kotlin.version>1.4.10</kotlin.version>
         <dokka.version>0.9.17</dokka.version>
-        <jackson.version>2.10.1</jackson.version>
+        <jackson.version>2.12.1</jackson.version>
         <graalvm.version>19.2.0</graalvm.version>
         <kotest.version>4.3.1</kotest.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -131,9 +131,9 @@
                 <version>5.1.0</version>
             </dependency>
             <dependency>
-                <groupId>com.teesoft</groupId>
-                <artifactId>jackson-dataformat-toml</artifactId>
-                <version>1.0</version>
+                <groupId>org.tomlj</groupId>
+                <artifactId>tomlj</artifactId>
+                <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>com.jayway.jsonpath</groupId>
@@ -153,7 +153,7 @@
             <dependency>
                 <groupId>org.apache.ant</groupId>
                 <artifactId>ant</artifactId>
-                <version>1.9.15</version>
+                <version>1.10.9</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.plugin-tools</groupId>
