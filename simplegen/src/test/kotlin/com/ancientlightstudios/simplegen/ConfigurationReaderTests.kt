@@ -10,7 +10,7 @@ class ConfigurationReaderTests : BehaviorSpec({
         val stream = getTestConfig().inputStream()
 
         When("loading the configuration file") {
-            val config = ConfigurationReader.readConfiguration(stream, getTestConfig().path)
+            val config = ConfigurationReader.readConfiguration(stream, getTestConfig().path, getTestConfig().lastModified())
 
             Then("returns  the configuration with the correct values") {
                 config.transformations shouldHaveSize 2

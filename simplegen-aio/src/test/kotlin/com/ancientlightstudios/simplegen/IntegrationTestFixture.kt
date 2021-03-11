@@ -13,7 +13,7 @@ class IntegrationTestFixture(configFile: String) : AutoCloseable {
     private val log = LoggerFactory.getLogger(IntegrationTestFixture::class.java)
 
     private val folder =
-        File(TomlIntegrationTest::class.java.getResource(configFile).toURI()).parentFile
+        File(IntegrationTestFixture::class.java.getResource(configFile).toURI()).parentFile
     private val outputFolder =
         Files.createTempDirectory("IntegrationTestFixture")
 

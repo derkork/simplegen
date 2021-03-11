@@ -30,53 +30,68 @@ class Materializer(private val fileResolver: FileResolver) {
 
         log.debug("Reading data from source files.")
 
-        val dataMaps = source.parsedData
-            .flatMap { dataSpec ->
-                // we template all input now.
-                val baseDir = templateEngine.execute(
-                    TemplateEngineJob(
-                        "config.yml -> transformations -> data -> basePath",
-                        dataSpec.basePath
-                    )
-                )
+        val dataMaps = mutableListOf<DependencyObject<Map<String, Any>>>()
 
-                val includes = dataSpec.includes.map { file ->
-                    templateEngine.execute(
+        for (item in source.parsedData) {
+            if (item.inlineData != null) {
+                if (item.inlineData is Map<*, *>) {
+                    @Suppress("UNCHECKED_CAST")
+                    dataMaps.add(DependencyObject(item.inlineData as Map<String, Any>, configuration.lastModified))
+                } else {
+                    log.warn("Inline data specified in your config.yml needs to be a map. Ignoring this data.")
+                }
+            } else {
+                dataMaps.addAll(listOf(item).flatMap { dataSpec ->
+                    // we template all input now.
+                    val baseDir = templateEngine.execute(
                         TemplateEngineJob(
-                            "config.yml -> transformations -> data -> includes",
-                            file
+                            "config.yml -> transformations -> data -> basePath",
+                            dataSpec.basePath
                         )
                     )
-                }
 
-                val excludes = dataSpec.excludes.map { file ->
-                    templateEngine.execute(
-                        TemplateEngineJob(
-                            "config.yml -> transformations -> data -> excludes",
-                            file
+                    val includes = dataSpec.includes.map { file ->
+                        templateEngine.execute(
+                            TemplateEngineJob(
+                                "config.yml -> transformations -> data -> includes",
+                                file
+                            )
                         )
-                    )
-                }
+                    }
 
-                val mimeType = when {
-                    dataSpec.mimeType != null -> templateEngine.execute(
-                        TemplateEngineJob(
-                            "config.yml -> transformations -> data -> mimeType",
-                            dataSpec.mimeType
+                    val excludes = dataSpec.excludes.map { file ->
+                        templateEngine.execute(
+                            TemplateEngineJob(
+                                "config.yml -> transformations -> data -> excludes",
+                                file
+                            )
                         )
-                    )
-                    else -> null
-                }
+                    }
 
-                val baseDirAsFile = fileResolver.resolve(baseDir)
-                val customResolver = SimpleFileResolver(baseDirAsFile.canonicalPath)
-                customResolver.resolve(includes, excludes)
-                    .map { file -> Pair(file, mimeType) }
+                    val mimeType = when {
+                        dataSpec.mimeType != null -> templateEngine.execute(
+                            TemplateEngineJob(
+                                "config.yml -> transformations -> data -> mimeType",
+                                dataSpec.mimeType
+                            )
+                        )
+                        else -> null
+                    }
+
+                    val baseDirAsFile = fileResolver.resolve(baseDir)
+                    val customResolver = SimpleFileResolver(baseDirAsFile.canonicalPath)
+                    customResolver.resolve(includes, excludes)
+                        .map { file -> Pair(file, mimeType) }
+                }
+                    .map { pair ->
+                        DependencyObject(DataLoader.parse(pair.first, pair.second), pair.first.lastModified())
+                    }
+                    .toList())
+
             }
-            .map { pair ->
-                DependencyObject(DataLoader.parse(pair.first, pair.second), pair.first.lastModified())
-            }
-            .toList()
+
+        }
+
 
         val dataLastModified: Long = dataMaps.lastModified()
         val data: Map<String, Any> = if (dataMaps.isEmpty()) {

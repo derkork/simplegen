@@ -12,9 +12,11 @@ object ConfigurationReader {
      * @param origin the origin where the configuration was loaded from.
      * @return the resulting configuration object.
      */
-    fun readConfiguration(stream: InputStream, origin: String): Configuration {
+    fun readConfiguration(stream: InputStream, origin: String, lastModified: Long): Configuration {
         try {
-            return ObjectMapper(YAMLFactory()).readValue(stream, Configuration::class.java)
+            val result = ObjectMapper(YAMLFactory()).readValue(stream, Configuration::class.java)
+            result.lastModified = lastModified
+            return result
         } catch (e: Exception) {
             throw ConfigurationException(origin, e.message)
         }

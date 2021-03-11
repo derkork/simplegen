@@ -8,7 +8,7 @@ import io.kotest.matchers.shouldBe
 class MaterializerTests : BehaviorSpec({
 
     Given("i have a read test configuration") {
-        val configuration = ConfigurationReader.readConfiguration(getTestConfig().inputStream(), getTestConfig().path)
+        val configuration = ConfigurationReader.readConfiguration(getTestConfig().inputStream(), getTestConfig().path, getTestConfig().lastModified())
         val materializer = Materializer(SimpleFileResolver(getResourcesRoot()))
 
         When("materializing the configuration") {

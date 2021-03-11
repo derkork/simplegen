@@ -1,0 +1,8 @@
+transformations:
+  - data:
+      - inline:
+          yaml:
+            works: true
+    template: template.j2
+    nodes: $
+    outputPath: result.txt

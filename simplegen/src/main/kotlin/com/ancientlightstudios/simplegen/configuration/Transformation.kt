@@ -17,7 +17,7 @@ class Transformation(
 
         for (item in input) {
             if (item is String) {
-                list.add(DataSpec("", listOf(item), listOf(), null))
+                list.add(DataSpec("", listOf(item), listOf(), null, null))
             }
 
             if (item is Map<*, *>) {
@@ -25,8 +25,9 @@ class Transformation(
                 val includes = item["includes"].asStringList()
                 val excludes = item["excludes"].asStringList()
                 val mimeType = item["mimeType"] as String?
+                val inlineData = item["inline"]
 
-                list.add(DataSpec(baseDir ?: "", includes, excludes, mimeType))
+                list.add(DataSpec(baseDir ?: "", includes, excludes, mimeType, inlineData))
             }
         }
         return list
@@ -36,6 +37,7 @@ class Transformation(
         val basePath: String,
         val includes: List<String>,
         val excludes: List<String>,
-        val mimeType: String?
+        val mimeType: String?,
+        val inlineData: Any?
     )
 }

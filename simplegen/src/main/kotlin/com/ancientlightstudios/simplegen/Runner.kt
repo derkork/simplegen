@@ -38,7 +38,7 @@ class Runner(private val basePath: String = ".",
         try {
 
             val config = configFile.inputStream().use {
-                ConfigurationReader.readConfiguration(it, configFile.path)
+                ConfigurationReader.readConfiguration(it, configFile.path, configFile.lastModified())
             }
 
             val materializer = Materializer(fileResolver)

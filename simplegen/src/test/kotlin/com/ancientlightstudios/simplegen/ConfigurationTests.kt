@@ -14,7 +14,8 @@ class ConfigurationTests : BehaviorSpec({
     Given("i have a read test configuration and a materializer") {
         val configuration = ConfigurationReader.readConfiguration(
             getTestConfig().inputStream(),
-            getTestConfig().path
+            getTestConfig().path,
+            getTestConfig().lastModified()
         )
 
         When("reading the configuration") {
