@@ -17,6 +17,7 @@ class TemplateEngine(fileResolver: FileResolver, arguments: TemplateEngineArgume
         configBuilder.withLstripBlocks(arguments.configuration.lstripBlocks)
         configBuilder.withTrimBlocks(arguments.configuration.trimBlocks)
         configBuilder.withEnableRecursiveMacroCalls(arguments.configuration.enableRecursiveMacroCalls)
+        configBuilder.withNestedInterpretationEnabled(arguments.configuration.nestedInterpretationEnabled)
 
         templateEngine = Jinjava(configBuilder.build())
         templateEngine.resourceLocator = RepositoryFileLocator(fileResolver)

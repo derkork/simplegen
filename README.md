@@ -255,18 +255,24 @@ You can also configure the template engine within `config.yml`. The template eng
 ```yaml
 # This is the global configuration. 
 templateEngine:
-    # if true the first newline after a template tag is removed 
+    # if true the first newline after a template tag is removed. default is false.
     trimBlocks: true
 
     # if true tabs and spaces from the beginning of a line to the start of a 
     # block are stripped. (Nothing will be stripped if there are other
-    # characters before the start of the block.)
+    # characters before the start of the block.). default is false.
     lstripBlocks: true
 
     # if true, macros are allowed to recursively call themselves. Be sure you
     # end the recursion at some point otherwise you may crash
     # with a stack overflow or just hang in an endless loop.
+    # default is false.
     enableRecursiveMacroCalls: true
+
+    # if true, expressions that yield jinja template code will be re-interpreted
+    # until no more jinja template code is in them. Use with care.  
+    # default false
+    nestedInterpretationEnabled: true
     
 transformations:
    - data: 

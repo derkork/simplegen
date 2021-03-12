@@ -6,21 +6,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-You can now specify inline data directly in `config.yml`. This is useful if you use multi-stage code generation (e.g. generate a `config.yml` and then run SimpleGen on the generated configuration) or if you just have a simple generation need and don't want to use extra data files to have all generation settings in one place.
+* You can now specify inline data directly in `config.yml`. This is useful if you use multi-stage code generation (e.g. generate a `config.yml` and then run SimpleGen on the generated configuration) or if you just have a simple generation need and don't want to use extra data files to have all generation settings in one place.
 
-```yaml
-transformations:
-  - data:
-    - inline:
-        this: is
-        inline: data
-        it:
-          - can 
-          - be 
-          - arbitrarily
-          - nested: yaml         
-```
- Note that inline data always needs to be a map.
+  ```yaml
+  transformations:
+    - data:
+      - inline:
+          this: is
+          inline: data
+          it:
+            - can 
+            - be 
+            - arbitrarily
+            - nested: yaml         
+  ```
+
+  Note that inline data always needs to be a map. Inline data can be mixed with all other data input, so you can mix it with YAML files, TOML files or XML files.
+
+### Changed
+* **Breaking Change**: You can now configure nested interpretation in the template engine. With nested interpretation the template engine will re-evaluate the result of an expression until there is no more Jinja code in it. 
+
+  ```jinja2
+  {% macro build_expression(value) %}
+  {{ '{{' }}{{ value }}{{ '}}'}} 
+  {% endmacro %}
+  
+  {# we print #}
+  -- {{ build_expression( 'test' ) }} --
+  
+  {# with nested interpretation off this yields: #}
+  -- {{ test }} --
+  
+  {# with nested interpretation on, the {{ test }} will
+   be re-evaluated again. Because no test variable is
+   defined, this will yield: #} 
+  -- --
+  ```
+  You can configure nested interpolation in `config.yaml` in the template engine settings:
+
+  ```yaml
+  templateEngine:
+    # if true, expressions that yield jinja template code will be re-interpreted
+    # until no more jinja template code is in them. Use with care.  
+    # default false
+    nestedInterpretationEnabled: true
+  ```
+  Before this setting was introduced, this was always enabled. I chose to disable it by default because it has a lot of sometimes puzzling side-effects and it has security implications if you run the code generator on input you do not have under control.
 
 ## [2.1.1] 2021-03-01
 ### Fixed
