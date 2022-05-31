@@ -215,6 +215,21 @@ transformations:
       # if you want to use a different format than yaml. If no mime type is specified, yaml is assumed.
       - includes: **/*.toml
         mimeType: application/toml
+      # Starting from version 3.0.0 SimpleGen also supports
+      # specifying data directly inline in the configuration
+      - inline:
+          # you can put arbitrary key-value pairs in here
+          foo: bar
+          baz: bam
+          # Arrays and nested structures are also supported
+          some_array:
+            - foo bar baz bam
+          deeper:
+            nested:
+              structure:
+                - is 
+                - also 
+                - possible
       
     # Which template should be used to render the data. Specify the path relative to the config.yml file.  
     template: settings-class.java.j2
