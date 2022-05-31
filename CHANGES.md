@@ -53,6 +53,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ```
   Before this setting was introduced, this was always enabled. I chose to disable it by default because it has a lot of sometimes puzzling side-effects and it has security implications if you run the code generator on input you do not have under control.
 
+### Security
+* Updated various library dependencies to mitigate security issues.
+
 ## [2.1.1] 2021-03-01
 ### Fixed
 * Fixed a parse error when parsing TOML files having quotes in their string values.
