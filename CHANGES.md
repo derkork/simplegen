@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Improved
+* When a data file include definition yields no results, this will be printed as a warning. This is preferable to the previous behaviour where this was just silently ignored.
+### Fixed
+* When referring to data with a simple relative path that is outside the base directory, the path is now correctly resolved, e.g.
+
+```yaml
+transformations:
+  - data:
+      # this is now correctly parsed
+      - ../data/data.yaml
+
+```
 ## [3.0.0] 2022-05-31
 ### Added
 * You can now specify inline data directly in `config.yml`. This is useful if you use multi-stage code generation (e.g. generate a `config.yml` and then run SimpleGen on the generated configuration) or if you just have a simple generation need and don't want to use extra data files to have all generation settings in one place.

@@ -3,6 +3,7 @@ package com.ancientlightstudios.simplegen
 import com.ancientlightstudios.simplegen.configuration.Configuration
 import com.ancientlightstudios.simplegen.configuration.TemplateEngineConfiguration
 import com.ancientlightstudios.simplegen.configuration.Transformation
+import com.ancientlightstudios.simplegen.resources.FileNotResolvedException
 import com.ancientlightstudios.simplegen.resources.FileResolver
 import com.ancientlightstudios.simplegen.resources.SimpleFileResolver
 import com.jayway.jsonpath.JsonPath
@@ -42,6 +43,23 @@ class Materializer(private val fileResolver: FileResolver) {
                 }
             } else {
                 dataMaps.addAll(listOf(item).flatMap { dataSpec ->
+                    // a single file was given as data source, this can be a relative path.
+                    if (dataSpec.file != null) {
+                        val parsedFile = templateEngine.execute(
+                            TemplateEngineJob(
+                                "config.yml -> transformations -> data",
+                                dataSpec.file
+                            )
+                        )
+                        try {
+                            val resolvedFile = fileResolver.resolve(parsedFile)
+                            return@flatMap listOf(Pair(resolvedFile, null))
+                        }
+                        catch(e:FileNotResolvedException) {
+                            log.warn("Data file '${parsedFile}' could not be resolved. Ignoring this file.")
+                        }
+                    }
+
                     // we template all input now.
                     val baseDir = templateEngine.execute(
                         TemplateEngineJob(
@@ -80,8 +98,14 @@ class Materializer(private val fileResolver: FileResolver) {
 
                     val baseDirAsFile = fileResolver.resolve(baseDir)
                     val customResolver = SimpleFileResolver(baseDirAsFile.canonicalPath)
-                    customResolver.resolve(includes, excludes)
-                        .map { file -> Pair(file, mimeType) }
+                    val resolvedFiles = customResolver.resolve(includes, excludes)
+                    if (resolvedFiles.isEmpty()) {
+                        log.warn("No data files could be resolved for basePath '${dataSpec.basePath}', " +
+                                "includes '${dataSpec.includes.joinToString(",") }," +
+                                "excludes '${dataSpec.excludes.joinToString("")} . Ignoring this data source.")
+                    }
+
+                    resolvedFiles.map { file -> Pair(file, mimeType) }
                 }
                     .map { pair ->
                         DependencyObject(DataLoader.parse(pair.first, pair.second), pair.first.lastModified())
