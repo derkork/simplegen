@@ -38,7 +38,7 @@
     </scm>
 
     <properties>
-        <kotlin.version>1.4.10</kotlin.version>
+        <kotlin.version>1.6.0</kotlin.version>
         <dokka.version>0.9.17</dokka.version>
         <jackson.version>2.13.3</jackson.version>
         <graalvm.version>19.2.0</graalvm.version>
