@@ -16,7 +16,7 @@ class JavaParser : DataParser {
             result = Roaster.parseUnit(stream)
         }
         catch(ex:ParserException) {
-            throw DataParseException(origin, ex.message);
+            throw DataParseException(origin, ex.message)
         }
 
         return mapOf("javaTypes" to result.topLevelTypes)
