@@ -13,10 +13,6 @@
     <artifactId>simplegen-dataformat-xml</artifactId>
     <name>SimpleGen - XML Data Format</name>
     <description>XML data format support for SimpleGen</description>
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
     <dependencies>
         <dependency>

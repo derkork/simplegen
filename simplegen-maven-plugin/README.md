@@ -1,5 +1,5 @@
 # SimpleGen Maven Plugin
-The SimpleGen Maven Plugin allows you to run SimpleGen within your Maven build. You can use this to generate code and then compile it with Maven in a single step.
+The SimpleGen Maven Plugin allows you to run SimpleGen within your Maven build. You can use this to generate code and then compile it with Maven in a single step. The Maven plugin contains all officially supported data formats (e.g. XML, TOML, etc.).
 
 To run the plugin, simply add it to the `build -> plugins` section of your Maven project:
 

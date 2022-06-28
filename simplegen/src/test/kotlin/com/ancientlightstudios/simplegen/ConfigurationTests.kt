@@ -48,8 +48,9 @@ class ConfigurationTests : BehaviorSpec({
                 data shouldNot beEmpty()
 
                 val entry = data[0]
+                entry.file shouldBe "data/data.yml"
                 entry.basePath shouldBe ""
-                entry.includes[0] shouldBe "data/data.yml"
+                entry.includes should beEmpty()
                 entry.excludes should beEmpty()
             }
 
@@ -76,8 +77,9 @@ class ConfigurationTests : BehaviorSpec({
 
             Then("supports specifying data directly at the node without a list") {
                 data shouldHaveSize 1
+                data[0].file shouldBe "data/data.yml"
                 data[0].basePath shouldBe ""
-                data[0].includes[0] shouldBe "data/data.yml"
+                data[0].includes should beEmpty()
                 data[0].excludes should beEmpty()
             }
         }
