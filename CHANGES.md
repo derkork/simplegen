@@ -4,11 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [4.0.0] <not yet released>
+### Breaking changes
+* Requires Java 11 or later to run.
+
+### Added
+* There is a new `flatten` filter which allows you to flatten nested arrays or collections.
+
 ### Improved
 * When a data file include definition yields no results, this will be printed as a warning. This is preferable to the previous behaviour where this was just silently ignored.
+
 ### Fixed
 * When referring to data with a simple relative path that is outside the base directory, the path is now correctly resolved, e.g.
+* When a scripting exception occurs and no line number is available, you will no longer get a useless error message.
 
 ```yaml
 transformations:

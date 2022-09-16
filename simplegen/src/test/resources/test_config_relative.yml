@@ -1,5 +1,5 @@
 transformations:
-  - template: template.j2
+  - template: templates/template.j2
     nodes: $
     data:
       - ../test-classes/data/data.yml

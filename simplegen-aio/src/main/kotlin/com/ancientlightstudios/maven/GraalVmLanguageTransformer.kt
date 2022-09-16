@@ -41,6 +41,7 @@ class GraalVmLanguageTransformer : ReproducibleResourceTransformer {
             }
     }
 
+    @Deprecated("Deprecated in Java", replaceWith = ReplaceWith("processResource(resource, inputStream, relocators, time)"))
     override fun processResource(resource: String, inputStream: InputStream, relocators: MutableList<Relocator>) {
         processResource(resource, inputStream, relocators, 0)
     }

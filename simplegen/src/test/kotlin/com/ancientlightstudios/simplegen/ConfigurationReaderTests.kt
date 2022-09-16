@@ -15,7 +15,7 @@ class ConfigurationReaderTests : BehaviorSpec({
             Then("returns  the configuration with the correct values") {
                 config.transformations shouldHaveSize 2
                 config.transformations[0].nodes shouldBe "nodes"
-                config.transformations[0].template shouldBe "template.j2"
+                config.transformations[0].template shouldBe "templates/template.j2"
             }
         }
     }

@@ -305,6 +305,8 @@ Congratulations, you've made it through the documentation! This section contains
 
 #### Additional built-in filters
 
+##### JSONPath filter
+
 In addition to the standard filters, this package adds a `jsonpath` filter to the template engine, so you can use JSONPath to effectively select interesting substructures of your data:
 
 ```jinja2
@@ -315,6 +317,17 @@ In addition to the standard filters, this package adds a `jsonpath` filter to th
 
 See the [JsonPath GitHub project](https://github.com/json-path/JsonPath) for a full documentation on how JsonPath works and what expressions you can use.
 
+##### Flattening collections/arrays
+
+The JSONPath filter sometimes returns arrays or collections nested into each other. This filter allows you to flatten these structures.
+
+```jinja2
+{% set foo = [1,2,3,[4,5,6]] %}
+{{ foo | flatten }} {# prints [1,2,3,4,5,6]  #}
+```
+
+##### Accessing system properties
+
 It is also possible to inject data through system properties using the `sp` filter:
   
 ```jinja2
@@ -323,6 +336,8 @@ It is also possible to inject data through system properties using the `sp` filt
 
 ```
 
+##### Accessing environment variables
+
 Similarly, you can access environment variables using the `env` filter. Note that these variables are dependent on the operating system, so your templates may not be portable when relying on environment variables:
 
 ```jinja2
@@ -330,8 +345,9 @@ Similarly, you can access environment variables using the `env` filter. Note tha
 {{ 'HOME' | env }}  
 ```
 
+##### Changing letter casing
 
-Finally a thing that is often required when generating code is case-changing of identifiers, so SimpleGen adds a custom filter for this as well. The syntax of this filter is:
+A thing that is often required when generating code is case-changing of identifiers, so SimpleGen adds a custom filter for this as well. The syntax of this filter is:
 
 ```jinja2
 case( <input case>, <output case> )
@@ -351,6 +367,8 @@ Supported case formats are:
 {{ 'some-string' | case('lower-hyphen', 'upper-camel') }} {# will print 'SomeString' #}
 
 ```
+
+
 
 #### Custom filters
 

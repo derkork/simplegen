@@ -9,8 +9,8 @@ import java.time.OffsetDateTime
 
 /**
  * Custom JSON serializer that serializes TOML into JSON which we can feed into Jackson later.
- * Not using TOMLjs serializer because it is buggy and I actually do not need indentation, so this is a
- * streamlined version that does what I need and I have it under control.
+ * Not using TOMLjs serializer because it is buggy, and I actually do not need indentation, so this is a
+ * streamlined version that does what I need, and I have it under control.
  */
 object JsonSerializer {
     fun toJson(table: TomlTable, appendable: Appendable) {
@@ -98,7 +98,7 @@ object JsonSerializer {
                 out.append("\\\\")
                 continue
             }
-            if (ch.toInt() >= 0x20) {
+            if (ch.code >= 0x20) {
                 out.append(ch)
                 continue
             }

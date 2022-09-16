@@ -18,7 +18,7 @@ class FileUtilTests : BehaviorSpec({
             }
 
             Then("yields absolute paths") {
-                result[0].absolutePath shouldBe File(getResourcesRoot(), "template.j2").absolutePath
+                result[0].absolutePath shouldBe File(getResourcesRoot(), "templates/template.j2").absolutePath
             }
         }
 

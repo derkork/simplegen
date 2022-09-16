@@ -8,7 +8,7 @@ customFilters:
     function: reverse
 
 transformations:
-  - template: template.j2
+  - template: templates/template.j2
     nodes: nodes
     data:
       - data/data.yml
@@ -26,7 +26,7 @@ transformations:
         basePath: data/bar
 
 
-  - template: template.j2
+  - template: templates/template.j2
     nodes: nodes
     data: data/data.yml
     templateEngine:
