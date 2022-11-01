@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.1.0] - 2022-11-01
 ### Added
 * You can now use [CSV](simplegen-dataformat-csv/README.md) as an input data format.
-* The Maven plugin now supports generating test sources. See the [README](simplegen-maven-plugin/README.md) for details (fixes [#44](https://github.com/derkork/simplegen/issues/44).
+* The Maven plugin now supports generating test sources. See the [README](simplegen-maven-plugin/README.md) for details (fixes [#44](https://github.com/derkork/simplegen/issues/44)).
 ### Improved
 * When a data file include definition yields no results, this will be printed as a warning. This is preferable to the previous behaviour where this was just silently ignored.
 ### Fixed
