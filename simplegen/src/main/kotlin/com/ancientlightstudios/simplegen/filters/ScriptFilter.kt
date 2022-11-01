@@ -24,7 +24,7 @@ class ScriptFilter(val source: String, script: String, private val function: Str
     }
 
     override fun getName(): String {
-        return function;
+        return function
     }
 
     override fun filter(obj: Any?, interpreter: JinjavaInterpreter?, vararg args: String?): Any? {
