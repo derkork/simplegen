@@ -134,7 +134,18 @@ class Materializer(private val fileResolver: FileResolver) {
             log.debug("Result: $data")
         }
 
-        var nodes = JsonPath.read<Any>(data, source.nodes)
+        // if nodes is not specified, we use the root node
+        var nodePath = source.nodes
+        if (nodePath.isEmpty()) {
+            log.warn("No nodes specified transformation. Assuming root node ($).")
+            nodePath = "$"
+        }
+
+        var nodes = try {
+            JsonPath.read<Any>(data, nodePath)
+        } catch (e: Exception) {
+            throw ConfigurationException("config.yml -> transformations -> nodes", "Invalid JSONPath: ${source.nodes}")
+        }
 
         if (nodes !is Iterable<*>) {
             nodes = listOf<Any>(nodes)

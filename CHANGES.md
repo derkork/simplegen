@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 * When referring to data with a simple relative path that is outside the base directory, the path is now correctly resolved.
 * SimpleGen will no longer crash when a JavaScript error has no detailed information.
+* When the `nodes` property is missing or invalid, a more helpful error message is now printed. (fixes [#32](https://github.com/derkork/simplegen/issues/32)).
 
 ```yaml
 transformations:
