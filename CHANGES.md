@@ -12,8 +12,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * When a data file include definition yields no results, this will be printed as a warning. This is preferable to the previous behaviour where this was just silently ignored.
 ### Fixed
 * When referring to data with a simple relative path that is outside the base directory, the path is now correctly resolved.
-* SimpleGen will no longer crash when a JavaScript error has no detailed information.
-* When the `nodes` property is missing or invalid, a more helpful error message is now printed. (fixes [#32](https://github.com/derkork/simplegen/issues/32)).
 
 ```yaml
 transformations:
@@ -22,6 +20,9 @@ transformations:
       - ../data/data.yaml
 
 ```
+* SimpleGen will no longer crash when a JavaScript error has no detailed information.
+* When the `nodes` property is missing or invalid, a more helpful error message is now printed. (fixes [#32](https://github.com/derkork/simplegen/issues/32)).
+
 ## [3.0.0] 2022-05-31
 ### Added
 * You can now specify inline data directly in `config.yml`. This is useful if you use multi-stage code generation (e.g. generate a `config.yml` and then run SimpleGen on the generated configuration) or if you just have a simple generation need and don't want to use extra data files to have all generation settings in one place.
