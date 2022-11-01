@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * When a data file include definition yields no results, this will be printed as a warning. This is preferable to the previous behaviour where this was just silently ignored.
 ### Fixed
 * When referring to data with a simple relative path that is outside the base directory, the path is now correctly resolved, e.g.
+* SimpleGen will no longer crash when a JavaScript error has no detailed information.
 
 ```yaml
 transformations:

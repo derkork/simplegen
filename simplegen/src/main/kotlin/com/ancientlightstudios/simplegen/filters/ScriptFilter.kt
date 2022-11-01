@@ -35,12 +35,12 @@ class ScriptFilter(val source: String, script: String, private val function: Str
             }, args).`as`(Object::class.java)
         }
         catch(e: PolyglotException) {
-            throw ScriptException(e.message, source, e.sourceLocation.startLine, e.sourceLocation.startColumn)
+            throw ScriptException(e.message, source, e.sourceLocation?.startLine ?: -1, e.sourceLocation?.startColumn ?: -1 )
         }
         catch(e: ScriptException) {
             if (e.cause is PolyglotException) {
                 val polyglotException = e.cause as PolyglotException
-                throw ScriptException(e.message, source, polyglotException.sourceLocation.startLine, polyglotException.sourceLocation.startColumn)
+                throw ScriptException(e.message, source, polyglotException.sourceLocation?.startLine ?: -1, polyglotException.sourceLocation?.startColumn ?: -1)
             }
             throw e
         }
