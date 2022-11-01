@@ -12,7 +12,7 @@ To run the plugin, simply add it to the `build -> plugins` section of your Maven
             <version>${simplegen-version}</version>
             <!-- This configuration section is optional, 
                  if you leave it out the plugin will use
-                 the default values -->
+                 these default values -->
             <configuration>
                 <sourceDirectory>${project.basedir}/src/main/simplegen</sourceDirectory>
                 <outputDirectory>${project.basedir}/target/generated-sources</outputDirectory>
@@ -25,6 +25,40 @@ To run the plugin, simply add it to the `build -> plugins` section of your Maven
                     <phase>generate-sources</phase>
                     <goals>
                         <goal>generate</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```
+
+## Generating test sources
+
+Starting with version 3.1.0, you can also generate test sources with the plugin. To do so, add the following to your `pom.xml`:
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>com.ancientlightstudios</groupId>
+            <artifactId>simplegen-maven-plugin</artifactId>
+            <version>${simplegen-version}</version>
+            <configuration>
+                <!-- This configuration section is optional, 
+                if you leave it out the plugin will use
+                these default values -->
+                <sourceDirectory>${project.basedir}/src/test/simplegen</sourceDirectory>
+                <outputDirectory>${project.basedir}/target/generated-test-sources</outputDirectory>
+                <configFileName>config.yml</configFileName>
+                <forceUpdate>false</forceUpdate>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>generate-test-sources</id>
+                    <phase>generate-test-sources</phase>
+                    <goals>
+                        <goal>testGenerate</goal>
                     </goals>
                 </execution>
             </executions>
