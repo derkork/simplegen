@@ -5,12 +5,15 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.tomlj.Toml
 import java.io.InputStream
-import java.util.*
 
 class TomlParser : DataParser {
     override val supportedDataFormats: Set<String> = setOf("application/toml")
 
-    override fun parse(stream: InputStream, origin: String): Map<String, Any> {
+    override fun init(configuration: Map<String, Any>) {
+        // nothing to do
+    }
+
+    override fun parse(stream: InputStream, origin: String, configuration: Map<String, Any>): Map<String, Any> {
         val typeRef = object : TypeReference<HashMap<String, Any>>() {}
         try {
             // simplest possible way, parse, TOML, convert to JSON, feed back into Jackson.

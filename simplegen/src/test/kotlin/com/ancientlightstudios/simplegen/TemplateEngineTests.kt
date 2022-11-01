@@ -39,7 +39,7 @@ class TemplateEngineTests : BehaviorSpec({
 
     Given("i have a template with a jsonpath filter") {
 
-        val data = YamlParser().parse("nestedprop:\n  prop2: value2\n".byteInputStream(), "plain text")
+        val data = YamlParser().parse("nestedprop:\n  prop2: value2\n".byteInputStream(), "plain text", mapOf())
         val context = mapOf<String, Any>("json" to data)
         val template = "{{ json | jsonpath('nestedprop.prop2') }}"
         val engine = TemplateEngine(getResourcesRootFileResolver())

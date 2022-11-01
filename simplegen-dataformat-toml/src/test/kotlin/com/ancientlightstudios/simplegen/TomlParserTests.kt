@@ -5,7 +5,6 @@ import io.kotest.matchers.maps.shouldHaveKey
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import org.intellij.lang.annotations.Language
-import javax.script.ScriptException
 
 class TomlParserTests : io.kotest.core.spec.style.BehaviorSpec({
 
@@ -16,7 +15,7 @@ class TomlParserTests : io.kotest.core.spec.style.BehaviorSpec({
       When("i parse the data") {
           @Language("Toml")
           val data = "[foo]\nbar=\"baz\"\nbam=7\nzam='\"'\nram=\"'\\\"\"\n"
-          val result = underTest.parse(data.byteInputStream(), "plain text")
+          val result = underTest.parse(data.byteInputStream(), "plain text", mapOf())
 
           Then("the data is properly parsed") {
               result shouldHaveKey "foo"
@@ -39,7 +38,7 @@ class TomlParserTests : io.kotest.core.spec.style.BehaviorSpec({
           @Language("Toml")
           val invalidData = "[foo]\nbar=\"baz oops i missed a quote"
           val exception = shouldThrow<DataParseException> {
-              underTest.parse(invalidData.byteInputStream(), "plain text")
+              underTest.parse(invalidData.byteInputStream(), "plain text", mapOf())
           }
 
           Then("I get a proper exception") {

@@ -29,6 +29,8 @@ class Materializer(private val fileResolver: FileResolver) {
         val templateEngineArguments = TemplateEngineArguments(TemplateEngineConfiguration(), filters.map { it.item })
         val templateEngine = TemplateEngine(fileResolver, templateEngineArguments)
 
+        DataLoader.initParsers(configuration.extensions)
+
         log.debug("Reading data from source files.")
 
         val dataMaps = mutableListOf<DependencyObject<Map<String, Any>>>()
@@ -53,7 +55,7 @@ class Materializer(private val fileResolver: FileResolver) {
                         )
                         try {
                             val resolvedFile = fileResolver.resolve(parsedFile)
-                            return@flatMap listOf(Pair(resolvedFile, null))
+                            return@flatMap listOf(Triple(resolvedFile, null, mapOf<String,Any>()))
                         }
                         catch(e:FileNotResolvedException) {
                             log.warn("Data file '${parsedFile}' could not be resolved. Ignoring this file.")
@@ -105,10 +107,10 @@ class Materializer(private val fileResolver: FileResolver) {
                                 "excludes '${dataSpec.excludes.joinToString("")} . Ignoring this data source.")
                     }
 
-                    resolvedFiles.map { file -> Pair(file, mimeType) }
+                    resolvedFiles.map { file -> Triple(file, mimeType, dataSpec.parserSettings) }
                 }
-                    .map { pair ->
-                        DependencyObject(DataLoader.parse(pair.first, pair.second), pair.first.lastModified())
+                    .map { triple ->
+                        DependencyObject(DataLoader.parse(triple.first, triple.third, triple.second), triple.first.lastModified())
                     }
                     .toList())
 

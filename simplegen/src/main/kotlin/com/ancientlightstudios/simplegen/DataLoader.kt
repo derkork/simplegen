@@ -38,20 +38,29 @@ object DataLoader {
         parsersByMimeType = tempMap
     }
 
-    fun parse(file: File, mimeType: String? = null): Map<String, Any> {
+    fun parse(file: File, parserSettings: Map<String, Any>, mimeType: String? = null): Map<String, Any> {
         val path = file.path
         val realMimeType = mimeType
             ?: "application/yaml"
 
         return file.inputStream().use {
-            parse(it, path, realMimeType)
+            parse(it, path, realMimeType, parserSettings)
         }
     }
 
-    fun parse(inputStream: InputStream, origin: String, mimeType: String): Map<String, Any> {
+    fun parse(inputStream: InputStream, origin: String, mimeType: String, parserSettings: Map<String, Any>): Map<String, Any> {
         val parser = parsersByMimeType[mimeType]
             ?: throw DataParseException(origin, "No parser is available for mime type $mimeType")
 
-        return parser.parse(inputStream, origin)
+        return parser.parse(inputStream, origin, parserSettings)
+    }
+
+    /**
+     * Initializes all parsers with the global configuration.
+     */
+    fun initParsers(extensionSettings: Map<String, Any>) {
+        parsersByMimeType.forEach { (_, parser) ->
+            parser.init(extensionSettings)
+        }
     }
 }

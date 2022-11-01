@@ -11,8 +11,11 @@ import javax.xml.stream.events.Attribute
 
 class XmlParser : DataParser {
     override val supportedDataFormats: Set<String> = setOf("application/xml", "text/xml")
+    override fun init(configuration: Map<String, Any>) {
+        // nothing to do
+    }
 
-    override fun parse(stream: InputStream, origin: String): Map<String, Any> {
+    override fun parse(stream: InputStream, origin: String, configuration: Map<String, Any>): Map<String, Any> {
         val xmlInputFactory = XMLInputFactory.newInstance()
         val reader: XMLEventReader = xmlInputFactory.createXMLEventReader(stream)
         val stack = Stack<MutableMap<String,Any>>()

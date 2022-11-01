@@ -49,6 +49,7 @@ class SimplegenMojo : AbstractMojo() {
         if (!Runner(sourceDirectory.path, configFileName, outputDirectory.path, forceUpdate).run()) {
             throw MojoFailureException("There were errors running SimpleGen.")
         }
+        
         project.addCompileSourceRoot(outputDirectory.path)
     }
 

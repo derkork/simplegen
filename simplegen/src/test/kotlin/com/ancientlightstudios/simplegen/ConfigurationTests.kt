@@ -49,25 +49,31 @@ class ConfigurationTests : BehaviorSpec({
 
                 val entry = data[0]
                 entry.basePath shouldBe ""
-                entry.includes[0] shouldBe "data/data.yml"
+                // special case: only a single file name was given
+                entry.file shouldBe "data/data.yml"
+                entry.includes should beEmpty()
                 entry.excludes should beEmpty()
             }
 
             Then("yields a result for single includes/excludes") {
                 data shouldHaveAtLeastSize 2
-                data[1].basePath shouldBe "data/foo"
-                data[1].includes[0] shouldBe "**/*.yml"
-                data[1].excludes[0] shouldBe "**/narf.yml"
+                val entry = data[1]
+                entry.file shouldBe null
+                entry.basePath shouldBe "data/foo"
+                entry.includes[0] shouldBe "**/*.yml"
+                entry.excludes[0] shouldBe "**/narf.yml"
             }
 
             Then("yields a result for multiple includes/excludes") {
                 data shouldHaveAtLeastSize 3
 
-               data[2].basePath shouldBe "data/bar"
-               data[2].includes[0] shouldBe "**/*.yml"
-               data[2].includes[1] shouldBe "**/*.yaml"
-               data[2].excludes[0] shouldBe "**/narf.yml"
-               data[2].excludes[1] shouldBe "**/narf.yaml"
+                val entry = data[2]
+                entry.file shouldBe null
+                entry.basePath shouldBe "data/bar"
+               entry.includes[0] shouldBe "**/*.yml"
+               entry.includes[1] shouldBe "**/*.yaml"
+               entry.excludes[0] shouldBe "**/narf.yml"
+               entry.excludes[1] shouldBe "**/narf.yaml"
             }
         }
 
@@ -76,9 +82,11 @@ class ConfigurationTests : BehaviorSpec({
 
             Then("supports specifying data directly at the node without a list") {
                 data shouldHaveSize 1
-                data[0].basePath shouldBe ""
-                data[0].includes[0] shouldBe "data/data.yml"
-                data[0].excludes should beEmpty()
+                val entry = data[0]
+                entry.file shouldBe "data/data.yml"
+                entry.basePath shouldBe ""
+                entry.includes should beEmpty()
+                entry.excludes should beEmpty()
             }
         }
     }

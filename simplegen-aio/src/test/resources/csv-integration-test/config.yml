@@ -1,0 +1,15 @@
+extensions:
+  csv:
+    separatorChar: ";"
+    quoteChar: "'"
+
+transformations:
+  - data:
+      - includes: data.csv
+        mimeType: application/csv
+        parserSettings:
+          skipLines: 5
+          resultPath: persons.list
+    template: template.j2
+    nodes: $
+    outputPath: result.txt

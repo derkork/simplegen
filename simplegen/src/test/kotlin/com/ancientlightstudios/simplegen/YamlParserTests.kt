@@ -15,7 +15,7 @@ class YamlParserTests : BehaviorSpec({
 
         When("trying to read the yaml") {
             val exception = shouldThrow<DataParseException> {
-                underTest.parse(stream, "plain text")
+                underTest.parse(stream, "plain text", mapOf())
             }
 
             Then("throws an exception with additional information") {

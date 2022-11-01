@@ -98,7 +98,7 @@ object JsonSerializer {
                 out.append("\\\\")
                 continue
             }
-            if (ch.toInt() >= 0x20) {
+            if (ch.code >= 0x20) {
                 out.append(ch)
                 continue
             }

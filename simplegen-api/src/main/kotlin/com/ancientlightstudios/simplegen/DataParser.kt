@@ -15,6 +15,11 @@ interface DataParser {
     val supportedDataFormats: Set<String>
 
     /**
+     * Initialize the parser with the given configuration. The configuration is parser specific.
+     */
+    fun init(configuration: Map<String,Any>)
+
+    /**
      * Parses the given input stream and returns a normalized map representation of the
      * parsed data.
      *
@@ -25,5 +30,5 @@ interface DataParser {
      * the origin parameter of any thrown [DataParseException].
      * @exception DataParseException in case the data cannot be parsed.
      */
-    fun parse(stream: InputStream, origin: String): Map<String, Any>
+    fun parse(stream: InputStream, origin: String, configuration: Map<String, Any>): Map<String, Any>
 }
