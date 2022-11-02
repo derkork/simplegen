@@ -4,9 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1] - 2022-11-02
+### Added
+- The CSV extension now supports the `text/csv` mime type as well.
+
+### Fixed
+- The CSV extension now is also included with the Maven plugin.
+- If the CSV contains an UTF-8 byte order mark (BOM), it is now automatically removed instead of breaking the first CSV header. You can disable this behavior by setting `stripBom` to `false` in the configuration.
+
 ## [3.1.0] - 2022-11-01
 ### Added
-* You can now use [CSV](simplegen-dataformat-csv/README.md) as an input data format.
+* You can now use [CSV](simplegen-dataformat-csv/README.md) as an input data format. **Note:** Due to a packaging error this was not included with the Maven plugin in 3.1.0. Please use 3.1.1 instead.
 * The Maven plugin now supports generating test sources. See the [README](simplegen-maven-plugin/README.md) for details (fixes [#44](https://github.com/derkork/simplegen/issues/44)).
 ### Improved
 * When a data file include definition yields no results, this will be printed as a warning. This is preferable to the previous behaviour where this was just silently ignored.

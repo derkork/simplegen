@@ -52,7 +52,7 @@ The generator can be used standalone or as a Maven plugin. In both cases it expe
 To use the generator through the command line, [download the latest version](https://github.com/derkork/simplegen/releases/latest) from GitHub. Then you can invoke the code generator by running:
 
 ```
-java -jar simplegen-aio-<version>.jar \
+java -jar simplegen-bundle.jar \
   --sourceDirectory <path to input structure> \
   --outputDirectory <path for generated files>
 ```
