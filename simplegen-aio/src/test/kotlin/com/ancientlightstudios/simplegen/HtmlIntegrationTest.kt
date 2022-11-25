@@ -4,11 +4,11 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
-class CsvIntegrationTest : BehaviorSpec({
+class HtmlIntegrationTest : BehaviorSpec({
 
-    val fixture = autoClose(IntegrationTestFixture("/csv-integration-test/config.yml"))
+    val fixture = autoClose(IntegrationTestFixture("/html-integration-test/config.yml"))
 
-    Given("a runner on a project with CSV files") {
+    Given("a runner on a project with HTML files") {
         val runner = fixture.buildRunner()
 
         When("I run the project") {
@@ -20,9 +20,10 @@ class CsvIntegrationTest : BehaviorSpec({
             }
             Then("the output file contains the correct data") {
                 val generatedText = outputFile.readText()
-                generatedText shouldContain "John is 20 years old."
-                generatedText shouldContain "Mary is 21 years old."
-                generatedText shouldContain "Peter is 22 years old."
+                generatedText shouldContain   "title=Example"
+                generatedText shouldContain   "text=This is an example of a simple HTML page with one paragraph."
+                generatedText shouldContain   "ownText=Lorem ipsum amet."
+                generatedText shouldContain   "nestedText=Lorem ipsum dolor sit amet."
             }
         }
     }

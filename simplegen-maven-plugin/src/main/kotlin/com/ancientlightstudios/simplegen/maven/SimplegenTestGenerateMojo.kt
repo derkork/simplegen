@@ -25,6 +25,7 @@ class SimplegenTestGenerateMojo : SimplegenBaseMojo() {
 
 
     override fun execute() {
+        Workarounds.loadResourceBundle(log)
         log.info("Generating test sources from ${File(sourceDirectory, configFileName).path} to ${outputDirectory.path}")
         if (!Runner(sourceDirectory.path, configFileName, outputDirectory.path, forceUpdate).run()) {
             throw MojoFailureException("There were errors running SimpleGen.")

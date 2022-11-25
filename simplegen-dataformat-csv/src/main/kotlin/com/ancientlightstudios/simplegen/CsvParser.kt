@@ -9,6 +9,9 @@ import java.nio.charset.Charset
 class CsvParser : DataParser {
     override val supportedDataFormats: Set<String> = setOf("text/csv", "application/csv")
 
+    override val defaultResultPath: String
+        get() = "csv"
+
     lateinit var settings: Map<String, Any>
 
     override fun init(configuration: Map<String, Any>) {
@@ -44,22 +47,8 @@ class CsvParser : DataParser {
                 .withSkipLines(asIntOrDefault(mergedSettings["skipLines"], 0))
                 .build()
 
-            // the result will be a list of maps, each map representing a row
-            // the user can configure the path of the result in the output map
-            val resultPath = mergedSettings["resultPath"] as? String ?: "csv"
-
-            // we split the path into its parts and create nested maps for each part
-            val resultPathParts = resultPath.split(".")
-            val result = mutableMapOf<String, Any>()
-
             // walk the path parts and create the nested maps
-            var currentMap = result
-            for (i in 0 until resultPathParts.size - 1) { // we don't need the last part, as it will be the key of the last map
-                val part = resultPathParts[i]
-                val newMap = mutableMapOf<String, Any>()
-                currentMap[part] = newMap
-                currentMap = newMap
-            }
+            val result = mutableMapOf<String,Any>()
 
             // now build the list of maps
             val resultList = mutableListOf<Map<String, Any>>()
@@ -69,42 +58,12 @@ class CsvParser : DataParser {
             }
 
             // and add it to the last map
-            currentMap[resultPathParts.last()] = resultList
+            result["entries"] = resultList
 
             return result
         } catch (e: Exception) {
             throw DataParseException(origin, e.message)
         }
-    }
-
-    private fun firstCharOfStringOrDefault(value: Any?, defaultValue: Char): Char {
-        if (value is String) {
-            return value.firstOrNull() ?: defaultValue
-        }
-        if (value is Char) {
-            return value
-        }
-        return defaultValue
-    }
-
-    private fun asIntOrDefault(value: Any?, defaultValue: Int): Int {
-        if (value is Int) {
-            return value
-        }
-        if (value is String) {
-            return value.toIntOrNull() ?: defaultValue
-        }
-        return defaultValue
-    }
-
-    private fun booleanOrDefault(value: Any?, defaultValue: Boolean): Boolean {
-        if (value is Boolean) {
-            return value
-        }
-        if (value is String) {
-            return value.toBoolean()
-        }
-        return defaultValue
     }
 
 }

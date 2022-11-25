@@ -6,6 +6,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import java.io.File
+import java.util.*
 
 @Suppress("unused")
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresProject = true)
@@ -25,6 +26,7 @@ class SimplegenGenerateMojo : SimplegenBaseMojo() {
 
 
     override fun execute() {
+        Workarounds.loadResourceBundle(log)
         log.info("Generating sources from ${File(sourceDirectory, configFileName).path} to ${outputDirectory.path}")
         if (!Runner(sourceDirectory.path, configFileName, outputDirectory.path, forceUpdate).run()) {
             throw MojoFailureException("There were errors running SimpleGen.")

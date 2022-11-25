@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2022-11-25
+### Added
+- Added support for parsing [HTML](simplegen-dataformat-html/README.md) files.
+
+### Changed
+- **Breaking change**: The `resultPath` configuration option of the CSV parsing module has moved up one level and is now available for all data formats. This allows you to control where parsed data is mounted in the data tree:
+  ```yaml
+  # before
+  data:
+    - includes: some_data.csv
+      mimeType: text/csv
+      parserSettings:
+        resultPath: some_data
+  
+  # after
+  data:
+    - includes: some_data.csv
+      mimeType: text/csv
+      resultPath: some_data
+  ```
+### Fixed
+- Fixed a problem where the template engine could not load error messages when being run in the Maven plugin. This would lead to a less than helpful error message when a template error occurred.
+
+
 ## [3.1.1] - 2022-11-02
 ### Added
 - The CSV extension now supports the `text/csv` mime type as well.

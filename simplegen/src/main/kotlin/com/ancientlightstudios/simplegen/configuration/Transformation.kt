@@ -26,10 +26,11 @@ class Transformation(
                 val excludes = item["excludes"].asStringList()
                 val mimeType = item["mimeType"] as String?
                 val inlineData = item["inline"]
+                val resultPath = item["resultPath"] as? String? ?: ""
                 @Suppress("UNCHECKED_CAST")
                 val parserSettings = item["parserSettings"] as? Map<String, Any> ?: mapOf()
 
-                list.add(DataSpec(baseDir ?: "", includes, excludes, mimeType, inlineData, null, parserSettings))
+                list.add(DataSpec(baseDir ?: "", includes, excludes, mimeType, inlineData, null, resultPath, parserSettings))
             }
         }
         return list
@@ -42,6 +43,7 @@ class Transformation(
         val mimeType: String?,
         val inlineData: Any?,
         val file: String? = null,
+        val resultPath: String = "",
         val parserSettings: Map<String, Any> = emptyMap(),
     )
 }

@@ -34,6 +34,10 @@
             <artifactId>simplegen-dataformat-csv</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.ancientlightstudios</groupId>
+            <artifactId>simplegen-dataformat-html</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
             <version>${shade.plugin.version}</version>

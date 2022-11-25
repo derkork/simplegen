@@ -55,6 +55,7 @@
         <module>simplegen-dataformat-toml</module>
         <module>simplegen-dataformat-csv</module>
         <module>simplegen-dataformat-xml</module>
+        <module>simplegen-dataformat-html</module>
         <module>simplegen-aio</module>
         <module>simplegen-maven-plugin</module>
     </modules>
@@ -94,6 +95,11 @@
             <dependency>
                 <groupId>com.ancientlightstudios</groupId>
                 <artifactId>simplegen-dataformat-xml</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ancientlightstudios</groupId>
+                <artifactId>simplegen-dataformat-html</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -140,6 +146,11 @@
                 <groupId>com.fasterxml.woodstox</groupId>
                 <artifactId>woodstox-core</artifactId>
                 <version>5.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>1.15.3</version>
             </dependency>
             <dependency>
                 <groupId>org.tomlj</groupId>

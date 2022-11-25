@@ -7,8 +7,15 @@
 SimpleGen is a simple yet powerful general-purpose code generator. It is not specialized to any language,
 so whatever your target language is (may it be Java, Kotlin, C#, Ruby, JavaScript, HTML, CSS, etc.) - if it is text then 
 this generator should be able to create it. SimpleGen has been used successfully in several projects to help create 
-repetitive or boilerplate code (e.g. JPA entity definitions or JavaScript rest clients), test data and even static 
-documentation websites. 
+repetitive or boilerplate code. Some applications in which SimpleGen has been used are:
+
+- create JPA entity definitions
+- create reusable test data 
+- create a JavaScript REST client
+- sanitize and filter OpenAPI specifications
+- generate a static documentation website
+- scraping data from HTML pages
+
 
 ## How SimpleGen works
 
@@ -130,6 +137,7 @@ In addition to YAML the following data formats are supported:
 * [TOML](simplegen-dataformat-toml/README.md)
 * [XML](simplegen-dataformat-xml/README.md)
 * [CSV](simplegen-dataformat-csv/README.md)
+* [HTML](simplegen-dataformat-html/README.md)
 
 
 Now that we have the data in place, we can start working on the template.
@@ -216,6 +224,11 @@ transformations:
       # if you want to use a different format than yaml. If no mime type is specified, yaml is assumed.
       - includes: **/*.toml
         mimeType: application/toml
+      # you can also specify a prefix path under which the data file should be mounted in the data tree.
+      - includes: some_data.csv
+        mimeType: application/csv
+        # you can  now access the data from the csv file under data.my_data
+        resultPath: my_data
       # Starting from version 3.0.0 SimpleGen also supports
       # specifying data directly inline in the configuration
       - inline:

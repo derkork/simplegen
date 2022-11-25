@@ -1,0 +1,7 @@
+transformations:
+  - data:
+      - includes: data.html
+        mimeType: text/html
+    template: template.j2
+    nodes: $
+    outputPath: result.txt

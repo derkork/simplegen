@@ -9,6 +9,7 @@ import com.ancientlightstudios.simplegen.resources.SimpleFileResolver
 import com.jayway.jsonpath.JsonPath
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.File
 import kotlin.math.max
 
 /**
@@ -55,7 +56,7 @@ class Materializer(private val fileResolver: FileResolver) {
                         )
                         try {
                             val resolvedFile = fileResolver.resolve(parsedFile)
-                            return@flatMap listOf(Triple(resolvedFile, null, mapOf<String,Any>()))
+                            return@flatMap listOf(MaterializedFile(resolvedFile, null, dataSpec.resultPath, mapOf<String,Any>()))
                         }
                         catch(e:FileNotResolvedException) {
                             log.warn("Data file '${parsedFile}' could not be resolved. Ignoring this file.")
@@ -107,10 +108,10 @@ class Materializer(private val fileResolver: FileResolver) {
                                 "excludes '${dataSpec.excludes.joinToString("")} . Ignoring this data source.")
                     }
 
-                    resolvedFiles.map { file -> Triple(file, mimeType, dataSpec.parserSettings) }
+                    resolvedFiles.map { file -> MaterializedFile(file, mimeType, dataSpec.resultPath, dataSpec.parserSettings) }
                 }
-                    .map { triple ->
-                        DependencyObject(DataLoader.parse(triple.first, triple.third, triple.second), triple.first.lastModified())
+                    .map { file ->
+                        DependencyObject(DataLoader.parse(file.file, file.mimeType, file.resultPath, file.options), file.file.lastModified())
                     }
                     .toList())
 
@@ -189,6 +190,13 @@ class Materializer(private val fileResolver: FileResolver) {
         }
         return result
     }
+
+    class MaterializedFile(
+        val file: File,
+        val mimeType: String?,
+        val resultPath: String,
+        val options: Map<String, Any>
+    )
 
 
 }

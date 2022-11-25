@@ -36,7 +36,7 @@ id,name,age
 will be equivalent to the following YAML structure:
 
 ```yaml
-csv:
+entries: # the list is always named "entries" 
   - id: 1
     name: John
     age: 30
@@ -75,7 +75,6 @@ The following configuration options are available:
 | `escapeChar`    | The character used to escape special characters in the CSV file.                 | `\\`    |
 | `skipLines`     | The number of lines to skip before parsing the CSV file.                         | `0`     |
 | `charset`       | The character set used to read the CSV file.                                     | `UTF-8` |
-| `resultPath`    | The path to the result in the data model. Nested paths are separated with a `.`. | `csv`   |    
 | `stripBom`      | Whether to strip an UTF-8 byte order mark from the input if it exists.           | `true`  |
 
 

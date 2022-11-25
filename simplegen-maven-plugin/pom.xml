@@ -21,20 +21,9 @@
     <dependencies>
         <dependency>
             <groupId>com.ancientlightstudios</groupId>
-            <artifactId>simplegen</artifactId>
+            <artifactId>simplegen-aio</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.ancientlightstudios</groupId>
-            <artifactId>simplegen-dataformat-toml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ancientlightstudios</groupId>
-            <artifactId>simplegen-dataformat-xml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ancientlightstudios</groupId>
-            <artifactId>simplegen-dataformat-csv</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>

@@ -1,0 +1,4 @@
+title={{ data | jsonpath('html.>[*].head.>[*].title.@text') | first }}
+text={{ data | jsonpath('html.>[*].body.>[*].p[?(@.class=="narf")].@text') | first}}
+ownText={{ data | jsonpath('html.>[*].body.>[*].div.@text') | first}}
+nestedText={{ data | jsonpath('html.>[*].body.>[*].div.@nestedText') | first}}
