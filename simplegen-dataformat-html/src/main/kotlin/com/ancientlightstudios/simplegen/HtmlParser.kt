@@ -18,7 +18,7 @@ class HtmlParser : DataParser {
 
         val mergedSettings = settings + configuration
 
-        val extractNestedText = booleanOrDefault(mergedSettings["extractNestedText"], false)
+        val extractNestedText = booleanOrDefault(mergedSettings["extractNestedText"], true)
         val document = Jsoup.parse(stream, "UTF-8", origin)
         val result = mutableMapOf<String, Any>()
         val root = document.root().firstElementChild() ?: return result
