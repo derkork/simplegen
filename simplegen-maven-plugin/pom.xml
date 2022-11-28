@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.ancientlightstudios</groupId>
         <artifactId>simplegen-root</artifactId>
-        <version>4.0.0</version>
+        <version>4.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <name>SimpleGen - Maven Plugin</name>
@@ -21,9 +21,28 @@
     <dependencies>
         <dependency>
             <groupId>com.ancientlightstudios</groupId>
-            <artifactId>simplegen-aio</artifactId>
+            <artifactId>simplegen</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.ancientlightstudios</groupId>
+            <artifactId>simplegen-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ancientlightstudios</groupId>
+            <artifactId>simplegen-dataformat-toml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ancientlightstudios</groupId>
+            <artifactId>simplegen-dataformat-csv</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ancientlightstudios</groupId>
+            <artifactId>simplegen-dataformat-xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ancientlightstudios</groupId>
+            <artifactId>simplegen-dataformat-html</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
