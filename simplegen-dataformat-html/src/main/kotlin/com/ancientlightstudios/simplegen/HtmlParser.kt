@@ -19,15 +19,23 @@ class HtmlParser : DataParser {
         val mergedSettings = settings + configuration
 
         val extractNestedText = booleanOrDefault(mergedSettings["extractNestedText"], true)
+        val extractNestedHtml = booleanOrDefault(mergedSettings["extractNestedHtml"], false)
+
         val document = Jsoup.parse(stream, "UTF-8", origin)
-        val result = mutableMapOf<String, Any>()
-        val root = document.root().firstElementChild() ?: return result
-        convertElement(root, result, extractNestedText)
-        return result
+        val contentMap = mutableMapOf<String, Any>()
+        val root = document.root().firstElementChild() ?: return contentMap
+        convertElement(root, contentMap, extractNestedText, extractNestedHtml)
+
+        return mapOf("entries" to listOf(mapOf("origin" to origin, "content" to contentMap)))
     }
 
 
-    private fun convertElement(element: Element, result: MutableMap<String, Any>, extractNestedText: Boolean) {
+    private fun convertElement(
+        element: Element,
+        result: MutableMap<String, Any>,
+        extractNestedText: Boolean,
+        extractNestedHtml: Boolean
+    ) {
         val name = element.tagName()
         val attributes = element.attributes()
         val children = element.children()
@@ -45,6 +53,9 @@ class HtmlParser : DataParser {
         if (extractNestedText) {
             elementMap["@nestedText"] = element.text()
         }
+        if (extractNestedHtml) {
+            elementMap["@nestedHtml"] = element.html()
+        }
 
         // put all children into the element map as an array under the '>' key
         // and recursively convert them
@@ -54,7 +65,7 @@ class HtmlParser : DataParser {
             for (child in children) {
                 val childMap = mutableMapOf<String, Any>()
                 childrenArray.add(childMap)
-                convertElement(child, childMap, extractNestedText)
+                convertElement(child, childMap, extractNestedText, extractNestedHtml)
             }
         }
     }

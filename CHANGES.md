@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2022-11-28
+### Changed
+- **Breaking change**: The [HTML](simplegen-dataformat-html/README.md) parser no longer tries to merge parsed HTML files as this doesn't make sense for HTML files. Instead, it will return a list of parsed HTML files. This is a breaking change because the output of the HTML parser is now a list instead of a single object. 
+
+### Added
+- The HTML parser can now add the nested HTML subtree to the parsed data under the `@nestedHtml` property. This is useful if you want to get the full text of an HTML element including all nested elements. This is disabled by default and can be enabled by setting the `extractNestedHtml` option to `true`.
+
 ## [4.0.1] - 2022-11-28
 ### Fixed
 - Fixed a dependency issue that caused the Maven plugin to fail in SimpleGen 4.0.0.

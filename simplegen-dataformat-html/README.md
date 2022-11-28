@@ -94,15 +94,20 @@ All white space around text nodes will be discarded. HTML usually contains text 
 will yield:
 
 ```yaml
-div:
-  '@text': Lorem ipsum amet.
-  '@nestedText': Lorem ipsum dolor sit amet.
-  '>':
-    - span:
-        '@text': dolor sit
-        '@nestedText': dolor sit
+entries:
+  - origin: "foo.html"
+    content:
+      div:
+        '@text': Lorem ipsum amet.
+        '@nestedText': Lorem ipsum dolor sit amet.
+        '>':
+          - span:
+              '@text': dolor sit
+              '@nestedText': dolor sit
 ```
     
+Note that unlike the other data formats, this will return a list of objects instead of a merged object. This is because it usually doesn't make sense to merge HTML data files. 
+
 ## Accessing the data with the `jsonpath` filter
 
 You can easily access the data in your templates with the built-in `jsonpath` filter. E.g. if you have a list of items in your HTML like this:
@@ -119,7 +124,7 @@ and you want to render this into let's say a HTML `select` tag you could do it l
 ```html
 <select>
     {# access the '>' list below the items and get all items from it #}
-    {% set items = data | jsonpath('$.ul.>[*].li') %}
+    {% set items = data | jsonpath('$..ul.>[*].li') %}
     {% for item in items %}
     <option value="{{ item.class }}">{{ item['@text'] }}</option>
     {% endfor %}
@@ -147,6 +152,7 @@ transformations:
 
 The following configuration options are available:
 
-| Option              | Description                                                                                                                                                              | Default |
-|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `extractNestedText` | Whether nested text should be extracted from the HTML elements. This can potentially consume a lot of memory, so you may want to disable this for very large HTML files. | `true`  |
+| Option              | Description                                                                                                                                                               | Default |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| `extractNestedText` | Whether nested text should be extracted from the HTML elements. This can potentially consume a lot of memory, so you may want to disable this for very large HTML files.  | `true`  |
+| `extractNestedHtml` | Whether nested HTML should be extracted from the HTML elements. This can potentially consume a lot of memory, so you may want to enable this only when you need it.       | `false` |
