@@ -1,6 +1,6 @@
 # SimpleGen -  A simple yet powerful general-purpose code generator
 
-![GitHub build status](https://img.shields.io/github/workflow/status/derkork/simplegen/Build%20&%20Test)
+![GitHub build status](https://img.shields.io/github/actions/workflow/status/derkork/simplegen/build-and-test.yaml?branch=master)
 ![Maven Central](https://img.shields.io/maven-central/v/com.ancientlightstudios/simplegen)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/derkork/simplegen)
 
