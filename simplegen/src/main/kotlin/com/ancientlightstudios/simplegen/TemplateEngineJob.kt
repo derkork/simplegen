@@ -8,6 +8,6 @@ class TemplateEngineJob(val source:String, val template:String ) {
         return this
     }
 
-    fun with(data:Any, node:Any) : TemplateEngineJob = with(mapOf("data" to data, "node" to node))
+    fun with(data:Any, node:Any) = with(mapOf("data" to data, "node" to node))
 
 }

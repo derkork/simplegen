@@ -42,7 +42,7 @@ class Materializer(private val fileResolver: FileResolver) {
                     @Suppress("UNCHECKED_CAST")
                     dataMaps.add(DependencyObject(item.inlineData as Map<String, Any>, configuration.lastModified))
                 } else {
-                    log.warn("Inline data specified in your config.yml needs to be a map. Ignoring this data.")
+                    log.warn("Inline data specified in your ${configuration.origin} needs to be a map. Ignoring this data.")
                 }
             } else {
                 dataMaps.addAll(listOf(item).flatMap { dataSpec ->
@@ -50,7 +50,7 @@ class Materializer(private val fileResolver: FileResolver) {
                     if (dataSpec.file != null) {
                         val parsedFile = templateEngine.execute(
                             TemplateEngineJob(
-                                "config.yml -> transformations -> data",
+                                "${configuration.origin} -> transformations -> data",
                                 dataSpec.file
                             )
                         )
@@ -66,7 +66,7 @@ class Materializer(private val fileResolver: FileResolver) {
                     // we template all input now.
                     val baseDir = templateEngine.execute(
                         TemplateEngineJob(
-                            "config.yml -> transformations -> data -> basePath",
+                            "${configuration.origin} -> transformations -> data -> basePath",
                             dataSpec.basePath
                         )
                     )
@@ -74,7 +74,7 @@ class Materializer(private val fileResolver: FileResolver) {
                     val includes = dataSpec.includes.map { file ->
                         templateEngine.execute(
                             TemplateEngineJob(
-                                "config.yml -> transformations -> data -> includes",
+                                "${configuration.origin} -> transformations -> data -> includes",
                                 file
                             )
                         )
@@ -83,7 +83,7 @@ class Materializer(private val fileResolver: FileResolver) {
                     val excludes = dataSpec.excludes.map { file ->
                         templateEngine.execute(
                             TemplateEngineJob(
-                                "config.yml -> transformations -> data -> excludes",
+                                "${configuration.origin} -> transformations -> data -> excludes",
                                 file
                             )
                         )
@@ -92,7 +92,7 @@ class Materializer(private val fileResolver: FileResolver) {
                     val mimeType = when {
                         dataSpec.mimeType != null -> templateEngine.execute(
                             TemplateEngineJob(
-                                "config.yml -> transformations -> data -> mimeType",
+                                "${configuration.origin} -> transformations -> data -> mimeType",
                                 dataSpec.mimeType
                             )
                         )
@@ -136,20 +136,22 @@ class Materializer(private val fileResolver: FileResolver) {
         }
 
         // if nodes is not specified, we use the root node
-        var nodePath = source.nodes
-        if (nodePath.isEmpty()) {
-            log.warn("No nodes specified transformation. Assuming root node ($).")
-            nodePath = "$"
+        val nodesSpec = source.parsedNodesExpression
+
+        var nodes = when (nodesSpec.type){
+            "", "jsonpath" -> evaluateJsonPath(configuration.origin, nodesSpec.expression, data)
+            "jinja2" -> evaluateJinja2(configuration.origin, templateEngine, nodesSpec.expression, data)
+            else -> throw ConfigurationException("${configuration.origin} -> transformations -> nodes -> type",
+                "unknown node expression type: ${nodesSpec.type}")
         }
 
-        var nodes = try {
-            JsonPath.read<Any>(data, nodePath)
-        } catch (e: Exception) {
-            throw ConfigurationException("config.yml -> transformations -> nodes", "Invalid JSONPath: ${source.nodes}")
+        if (nodes == null) {
+            log.warn("In ${configuration.origin} -> transformations -> nodes: No nodes found for expression '${nodesSpec.expression}'.")
+            nodes = emptyList<Any>()
         }
 
         if (nodes !is Iterable<*>) {
-            nodes = listOf<Any>(nodes)
+            nodes = listOf(nodes)
         }
 
         val result = mutableListOf<DependencyObject<MaterializedTransformation>>()
@@ -159,13 +161,13 @@ class Materializer(private val fileResolver: FileResolver) {
 
             val outputFile = templateEngine.execute(
                 TemplateEngineJob(
-                    "config.yml -> transformations -> outputPath",
+                    "${configuration.origin} -> transformations -> outputPath",
                     source.outputPath
                 ).with(data, node)
             )
             val templateSource = templateEngine.execute(
                 TemplateEngineJob(
-                    "config.yml -> transformations -> template",
+                    "${configuration.origin} -> transformations -> template",
                     source.template
                 ).with(data, node)
             )
@@ -191,6 +193,32 @@ class Materializer(private val fileResolver: FileResolver) {
         return result
     }
 
+    private fun evaluateJinja2(origin: String, templateEngine: TemplateEngine,
+                               expression: String, data: Map<String, Any>): Any? {
+        try {
+            return templateEngine.evaluateExpression(expression, data)
+        } catch (e: Exception) {
+            throw ConfigurationException("$origin -> transformations -> nodes -> expression", e.message ?: "unknown error")
+        }
+    }
+
+
+    private fun evaluateJsonPath(origin: String, jsonPath: String, data: Map<String, Any>): Any? {
+        var nodePath = jsonPath
+        if (nodePath.isEmpty()) {
+            log.warn("No nodes specified transformation. Assuming root node ($).")
+            nodePath = "$"
+        }
+
+        return try {
+            JsonPath.read<Any?>(data, nodePath)
+        } catch (e: Exception) {
+            throw ConfigurationException(
+                "$origin -> transformations -> nodes",
+                "Invalid JSONPath: $nodePath"
+            )
+        }
+    }
     class MaterializedFile(
         val file: File,
         val mimeType: String?,

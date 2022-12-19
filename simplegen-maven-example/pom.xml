@@ -14,7 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <simplegen-version>2.0.0</simplegen-version>
+        <simplegen-version>5.1.0</simplegen-version>
     </properties>
 
     <dependencies>

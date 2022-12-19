@@ -3,6 +3,43 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [5.1.0] 2022-12-19
+### Added
+- It is now possible to use Jinja2 expressions for selecting the nodes to process in a transformation. Until now only JSONPath was possible. With Jinja2 expression and the ability to use JavaScript filters it is now possible to select nodes in ways that were not possible with a JSONPath (e.g. only odd/even nodes, comparison with arbitrary injected values ,etc.) or to transform the selection:
+
+  ```yaml
+  transformations:
+    - data:
+        - data.yaml
+      template: template.j2
+      nodes:
+        # take all strings in the "nodes" array and prefix them
+        # with the string "test-"
+        expression: "data.nodes | prefix('test-')"
+        type: jinja2
+  
+      outputPath: '{{ node }}.txt'
+  ```
+- The Maven plugin now has a standalone goal, so you can invoke SimpleGen via Maven without a `pom.xml` file. This is useful for example when you want to use SimpleGen in a CI/CD pipeline. The standalone goal is called `simplegen:generateStandalone` and can be invoked like this:
+
+  ```bash
+  mvn com.ancientlightstudios:simplegen-maven-plugin:5.1.0:generateStandalone
+  ```
+  By default, this looks for a `config.yml` in the current folder. You can override configuration settings using system properties, e.g.:
+
+  ```bash
+  mvn com.ancientlightstudios:simplegen-maven-plugin:5.1.0:generateStandalone \
+   # name of the configuration file (default: config.yml)
+   -Dsimplegen.configFileName=myconfig.yml \
+   # path to the source folder (default: .)
+   -Dsimplegen.sourceDirectory=/path/to/source \
+   # path to the output folder (default: .)
+   -Dsimplegen.outputDirectory=/path/to/output \
+   # whether to re-generate files that have no changed input (default: false)
+   -Dsimplegen.forceUpdate=true
+  ```
+### Improved
+- SimplegGen now gives better error/warning messages for a variety of cases.
 
 ## [5.0.0] - 2022-11-28
 ### Changed

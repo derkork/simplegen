@@ -7,6 +7,7 @@ import com.ancientlightstudios.simplegen.filters.SystemPropertyFilter
 import com.ancientlightstudios.simplegen.resources.FileResolver
 import com.hubspot.jinjava.Jinjava
 import com.hubspot.jinjava.JinjavaConfig
+import com.hubspot.jinjava.interpret.Context
 
 class TemplateEngine(fileResolver: FileResolver, arguments: TemplateEngineArguments = TemplateEngineArguments()) {
 
@@ -36,5 +37,16 @@ class TemplateEngine(fileResolver: FileResolver, arguments: TemplateEngineArgume
             throw TemplateErrorException(job, result)
         }
         return result.output
+    }
+
+    fun evaluateExpression(expression: String, bindings: Map<String, Any>): Any? {
+        val context = Context(
+            templateEngine.globalContext,
+            mapOf("data" to bindings),
+        )
+        val interpreter = templateEngine.globalConfig.interpreterFactory
+            .newInstance(templateEngine,context,templateEngine.globalConfig)
+
+        return interpreter.resolveELExpression(expression, 0)
     }
 }

@@ -16,6 +16,7 @@ object ConfigurationReader {
         try {
             val result = ObjectMapper(YAMLFactory()).readValue(stream, Configuration::class.java)
             result.lastModified = lastModified
+            result.origin = origin
             return result
         } catch (e: Exception) {
             throw ConfigurationException(origin, e.message)

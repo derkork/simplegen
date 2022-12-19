@@ -5,4 +5,5 @@ class Configuration(
         val templateEngine: TemplateEngineConfiguration = TemplateEngineConfiguration(),
         val customFilters: List<CustomFilterConfiguration> = emptyList(),
         val extensions: Map<String, Any> = emptyMap(),
-        var lastModified: Long = 0)
+        var lastModified: Long = 0,
+        var origin: String = "")

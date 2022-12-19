@@ -1,6 +1,20 @@
+customFilters:
+  - script: prefix.js
+    function:
+      - prefix
+
 transformations:
   - data:
       - data.yaml
     template: template.j2
     nodes: $
     outputPath: result.txt
+
+  - data:
+      - data.yaml
+    template: template.j2
+    nodes:
+      expression: "data.nodes | prefix('test-')"
+      type: jinja2
+
+    outputPath: '{{ node }}.txt'

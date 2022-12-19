@@ -267,6 +267,19 @@ transformations:
     # by using an expression in the output path. This uses
     # node.name which is the name of the setting. 
     outputPath: "docs/{{ node.name }}.html"
+
+  - data:
+      - data.yaml
+    template: template.j2
+    # Starting with SimpleGen 5.1.0 you can now also use 
+    # jinja2 expressions in the nodes selector. This gives
+    # you a lot more flexibility in how you select the nodes for processing.
+    nodes:
+      # take all strings in the "settings" array and prefix them
+      # with the string "test-"
+      expression: "data.settings | prefix('test-')"
+      type: jinja2
+    outputPath: "settings/{{ node }}.html"
 ```
 
 You can use expressions in all fields of the configuration. So e.g. if you want to pull data from a folder set by a system property you can do it like this:

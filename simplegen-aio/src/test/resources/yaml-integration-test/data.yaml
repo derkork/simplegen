@@ -1,2 +1,6 @@
 yaml:
     works: true
+nodes:
+    - lorem
+    - ipsum
+    - dolor
